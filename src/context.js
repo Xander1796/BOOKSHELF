@@ -6,8 +6,8 @@ const AppProvider = ({ children }) => {
   const [isVisible, setIsVisible] = useState(false);
   let [bestSelledBooks, setBestSelledBooks] = useState(["something"]);
   const [isFetching, setIsFetching] = useState(true);
-  const [singleBook, setSingleBook] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [totalSearchPages, setTotalSearchPages] = useState(1);
 
   const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
@@ -22,29 +22,11 @@ const AppProvider = ({ children }) => {
       const response = await data.json();
       setBestSelledBooks(response.results.lists);
       setIsFetching(false);
+      console.log('yes')
     }
 
     getBestSelledBooks();
   }, []);
-
-  const getSingleBook = async (isbn) => {
-    try {
-      setIsLoading(true);
-      setIsFetching(true);
-      const data = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=+isbn:${isbn}`
-      );
-      const response = await data.json();
-      setSingleBook(response.items[0].volumeInfo);
-      console.log(response.items[0].volumeInfo);
-
-      setIsFetching(false);
-      setIsLoading(false);
-      return response;
-    } catch (error) {
-      alert(error);
-    }
-  };
 
   return (
     <AppContext.Provider
@@ -53,10 +35,10 @@ const AppProvider = ({ children }) => {
         setIsVisible,
         bestSelledBooks,
         isFetching,
-        getSingleBook,
-        singleBook,
-        setSingleBook,
-        isLoading,
+        searchQuery,
+        setSearchQuery,
+        totalSearchPages,
+        setTotalSearchPages,
       }}
     >
       {children}

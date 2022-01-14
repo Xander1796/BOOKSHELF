@@ -205,7 +205,7 @@ nav {
 }
 
 .search-button:hover {
-  background: var(--accent-color-600);
+  background: #2065d3;
 }
 
 .bookshelf-actions {
@@ -383,7 +383,9 @@ nav {
 }
 
 .best-selled-list li:hover {
-  border-color: var(--primary-color-700);
+  box-shadow: 3px 3px 20px rgb(32 33 36 / 15%);
+  border-color: transparent;
+  transform: translateY(-5px);
 }
 
 .best-selled-list img {
@@ -476,12 +478,29 @@ nav {
 
 .single-book-description-details {
   margin-top: 5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--primary-color-500);
 }
 
 .single-book-description {
   font-size: 1.6rem;
   line-height: 2.5rem;
-  transition: .3s ease height;
+  transition: .3s ease all;
+  overflow: hidden;
+  max-height: 10rem;
+}
+
+.more-description-content {
+  font-size: 1.6rem;
+  line-height: 2.5rem;
+  transition: .3s ease all;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.more-description-content-visible {
+  opacity: 1;
 }
 
 .single-book-description-details .read-more-btn {
@@ -502,11 +521,22 @@ nav {
   display: flex;
   flex-wrap: wrap;
   gap: 4rem;
-  margin-top: 5rem;
+  padding-top: 2.5rem;
 }
 
 .single-book-details h3,
 .single-book-details p {
   font-size: 1.5rem;
+}
+
+.single-book-details p,
+.single-book-details p span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.single-book-details p span {
+  color: var(--secondary-color);
+  margin-right: .5rem;
 }
 

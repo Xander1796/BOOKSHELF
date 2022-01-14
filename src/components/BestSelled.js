@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 import noImage from "../assets/svg/no-image.png";
@@ -8,11 +8,12 @@ import noImage from "../assets/svg/no-image.png";
 import { v4 as uniqueId } from "uuid";
 
 //icons
-import { BiRightArrowAlt, BiUpArrowAlt, BiDownArrowAlt } from "react-icons/bi";
+import { BiRightArrowAlt } from "react-icons/bi";
 import { MdSell } from "react-icons/md";
 
 const BestSelled = () => {
-  const { bestSelledBooks, isFetching, getSingleBook } = useGlobalContext();
+  const { bestSelledBooks, isFetching } = useGlobalContext();
+  const navigate = useNavigate();
 
   return (
     <section id="best-selled" className="best-selled-books">
@@ -28,12 +29,11 @@ const BestSelled = () => {
           return (
             <article key={id}>
               <h3>{el.display_name}</h3>
-              <ul key={id} className="best-selled-list">
+              <ul className="best-selled-list">
                 {el.books.map((book) => {
                   console.log("yeee");
                   const {
                     rank,
-                    rank_last_week,
                     title,
                     book_image,
                     weeks_on_list,
@@ -41,20 +41,24 @@ const BestSelled = () => {
                   } = book;
                   const id = uniqueId();
                   return (
-                    <li
-                      key={id}
-                      onClick={() => getSingleBook(book.primary_isbn10)}
-                    >
-                      <Link to="/details">
-                        <span className="book-rank">
-                          {rank}
-                          {Number(rank) > Number(rank_last_week) ? (
-                            <BiDownArrowAlt />
-                          ) : (
-                            <BiUpArrowAlt />
-                          )}
-                        </span>
-                        <img src={book_image || noImage} alt={`Image for ${title}`} />
+                    <li key={id}>
+                      <a
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          console.log(book)
+                          const response = await fetch(
+                            `https://www.googleapis.com/books/v1/volumes?q=${book.primary_isbn10}`
+                          );
+                          const data = await response.json();
+                          console.log(data);
+                          navigate(`/book/${data.items[0].id}`)
+                        }}
+                      >
+                        <span className="book-rank">{rank}</span>
+                        <img
+                          src={book_image || noImage}
+                          alt={`Image for ${title}`}
+                        />
                         <div>
                           <span className="weeks-on-list">
                             {Number(weeks_on_list) > 1
@@ -65,7 +69,7 @@ const BestSelled = () => {
                           <p>{contributor}</p>
                         </div>
                         <BiRightArrowAlt className="card-icon-right-arr" />
-                      </Link>
+                      </a>
                     </li>
                   );
                 })}
