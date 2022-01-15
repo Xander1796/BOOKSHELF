@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 import LoadingSpinner from "../components/LoadingSpinner";
+import Book from "../components/Book";
 
-//icons
-
-import { BiRightArrowAlt } from "react-icons/bi";
+import { v4 as uniqueId } from "uuid";
 
 const SearchResults = () => {
-  const { searchQuery, setTotalSearchPages, setSearchQuery } =
-    useGlobalContext();
-  const [searchResults, setSearchResults] = useState({});
+  let { searchQuery, setTotalSearchPages, setSearchQuery } = useGlobalContext();
+  const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const getSearchResults = async () => {
-      console.log("search results fetch");
+      setSearchQuery(searchParams.get("q"));
+
       setIsLoading(true);
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchParams.get(
           "q"
-        )}&maxResults=20`
+        )}&maxResults=20&printType=books`
       );
       const data = await response.json();
-      const filteredData = data.items.filter((item) => {        
-        return item.volumeInfo.industryIdentifiers.find((identifier) => {
-          return identifier.type === "ISBN_10";
-        });
-      });
-      console.log(filteredData, data.items);
-
-      setSearchResults(filteredData);
+      console.log(data);
+      setSearchResults(data.items);
       setTotalSearchPages(
         Math.ceil(Number(data.totalItems) / data.items.length)
       );
@@ -40,37 +33,20 @@ const SearchResults = () => {
     };
 
     getSearchResults();
-  }, [searchQuery]);
+  }, [searchParams]);
 
   return (
     <>
       {isLoading && <LoadingSpinner />}
       {isLoading || (
         <article>
-          <h1></h1>
-          <ul className="best-selled-list">
-            {searchResults.map((book, i) => {
-              console.log("yeee");
-              const { title, authors, imageLinks, lalalal } = book.volumeInfo;
-              const src = imageLinks.thumbnail;
-              const isbn = book.volumeInfo.industryIdentifiers.find(
-                (identifier) => identifier.type === "ISBN_10"
-              );
-              return (
-                <li key={i}>
-                  <Link to={`/book:${isbn ? isbn.identifier : ""}`}>
-                    <img src={src ? src : ""} alt={`${title}`} />
-                    <div>
-                      <h4>{title}</h4>
-                      <p>{authors}</p>
-                    </div>
-                    <BiRightArrowAlt className="card-icon-right-arr" />
-                  </Link>
-                </li>
-              );
+          <h1>{`Search results for ${searchQuery}`}</h1>
+          <ul className="search-list book-list">
+            {searchResults.map((book) => {
+              const id = uniqueId();
+              return <Book {...book} key={id} />;
             })}
           </ul>
-          <button className="btn btn-regular">Load More</button>
         </article>
       )}
     </>

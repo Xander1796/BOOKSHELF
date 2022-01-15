@@ -4,27 +4,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 const Search = () => {
-  const { searchQuery, setSearchQuery } = useGlobalContext();
-  const searchInput = useRef();
+  const { setSearchQuery, searchInput } = useGlobalContext();
   const navigate = useNavigate();
 
   return (
-    <form className="search-wrapper">
-      <input
-        id="search"
-        placeholder="Search for books"
-        ref={searchInput}
-      />
-      <button
-        className="search-button"
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(`/search?q=${searchInput.current.value}`)
+    <form
+      className="search-wrapper"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (searchInput.current.value.trim().length > 0) {
+          navigate(`/search?q=${searchInput.current.value.trim()}`);
           setSearchQuery(searchInput.current.value);
-        }}
-      >
-      Search
-      </button>
+        }
+      }}
+    >
+      <input id="search" placeholder="Search for books" ref={searchInput} />
+      <div className="search-wrapper-border"></div>
+      <button className="search-button">Search</button>
     </form>
   );
 };

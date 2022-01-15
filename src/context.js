@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 
 const AppContext = React.createContext();
 
@@ -7,7 +7,10 @@ const AppProvider = ({ children }) => {
   let [bestSelledBooks, setBestSelledBooks] = useState(["something"]);
   const [isFetching, setIsFetching] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const searchInput = useRef();
   const [totalSearchPages, setTotalSearchPages] = useState(1);
+
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
@@ -22,7 +25,7 @@ const AppProvider = ({ children }) => {
       const response = await data.json();
       setBestSelledBooks(response.results.lists);
       setIsFetching(false);
-      console.log('yes')
+      console.log("yes");
     }
 
     getBestSelledBooks();
@@ -39,6 +42,9 @@ const AppProvider = ({ children }) => {
         setSearchQuery,
         totalSearchPages,
         setTotalSearchPages,
+        searchInput,
+        setIsPopupVisible,
+        isPopupVisible
       }}
     >
       {children}

@@ -29,7 +29,7 @@ const BestSelled = () => {
           return (
             <article key={id}>
               <h3>{el.display_name}</h3>
-              <ul className="best-selled-list">
+              <ul className="book-list">
                 {el.books.map((book) => {
                   console.log("yeee");
                   const {
@@ -65,8 +65,8 @@ const BestSelled = () => {
                               ? `${weeks_on_list} weeks on the list`
                               : `${weeks_on_list} week on the list`}
                           </span>
-                          <h4>{title}</h4>
-                          <p>{contributor}</p>
+                          <h4>{title.length > 35 ? `${title.slice(0, 35)} ...` : title}</h4>
+                          <p>{contributor.length > 35 ? `${contributor.slice(0, 35)} ...` : contributor}</p>
                         </div>
                         <BiRightArrowAlt className="card-icon-right-arr" />
                       </a>

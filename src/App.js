@@ -7,11 +7,13 @@ import SearchResults from "./pages/SearchResults";
 
 //import components
 import Navbar from "./components/Navbar";
+import Popup from "./components/Popup";
 
 const App = () => {
   return (
     <Router>
       <Navbar />
+      <Popup />
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/book/:volumeId" element={<SingleBook />}></Route>
