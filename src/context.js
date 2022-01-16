@@ -12,6 +12,12 @@ const AppProvider = ({ children }) => {
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
+  const [bookshelf, setBookshelf] = useState({
+    readingNow: [],
+    toRead: [],
+    finishedBooks: [],
+  });
+
   const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
   console.log("render");
@@ -44,7 +50,9 @@ const AppProvider = ({ children }) => {
         setTotalSearchPages,
         searchInput,
         setIsPopupVisible,
-        isPopupVisible
+        isPopupVisible,
+        bookshelf,
+        setBookshelf
       }}
     >
       {children}

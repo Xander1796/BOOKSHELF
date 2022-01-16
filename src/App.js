@@ -8,6 +8,7 @@ import SearchResults from "./pages/SearchResults";
 //import components
 import Navbar from "./components/Navbar";
 import Popup from "./components/Popup";
+import Bookshelf from "./pages/Bookshelf";
 
 const App = () => {
   return (
@@ -18,6 +19,9 @@ const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/book/:volumeId" element={<SingleBook />}></Route>
         <Route path="/search" element={<SearchResults />}></Route>
+        <Route path="/bookshelf/reading-now" element={<Bookshelf />}></Route>
+        <Route path="/bookshelf/to-read" element={<Bookshelf />}></Route>
+        <Route path="/bookshelf/finished-books" element={<Bookshelf />}></Route>
       </Routes>
     </Router>
   );

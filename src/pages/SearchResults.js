@@ -3,7 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 import LoadingSpinner from "../components/LoadingSpinner";
-import Book from "../components/Book";
+import SearchBook from "../components/SearchBook";
+import { AiOutlineSearch } from "react-icons/ai";
 
 import { v4 as uniqueId } from "uuid";
 
@@ -39,15 +40,19 @@ const SearchResults = () => {
     <>
       {isLoading && <LoadingSpinner />}
       {isLoading || (
-        <article>
-          <h1>{`Search results for ${searchQuery}`}</h1>
-          <ul className="search-list book-list">
-            {searchResults.map((book) => {
-              const id = uniqueId();
-              return <Book {...book} key={id} />;
-            })}
-          </ul>
-        </article>
+        <section className="search-section">
+          <p className="search-section-title">
+            <AiOutlineSearch /> Search results for <span>{searchQuery}</span>
+          </p>
+          <article>
+            <ul className="search-list book-list">
+              {searchResults.map((book) => {
+                const id = uniqueId();
+                return <SearchBook {...book} key={id} />;
+              })}
+            </ul>
+          </article>
+        </section>
       )}
     </>
   );

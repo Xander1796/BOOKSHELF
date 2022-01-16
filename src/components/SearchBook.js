@@ -8,10 +8,9 @@ import { useGlobalContext } from "../context";
 
 import { BiRightArrowAlt } from "react-icons/bi";
 
-const Book = (book) => {
+const SearchBook = (book) => {
   const { title, authors, imageLinks } = book.volumeInfo;
   const volumeId = book.id;
-  console.log(book);
   const { searchInput } = useGlobalContext();
 
   return (
@@ -31,4 +30,4 @@ const Book = (book) => {
   );
 };
 
-export default Book;
+export default SearchBook;

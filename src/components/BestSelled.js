@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 import noImage from "../assets/svg/no-image.png";
@@ -9,7 +9,6 @@ import { v4 as uniqueId } from "uuid";
 
 //icons
 import { BiRightArrowAlt } from "react-icons/bi";
-import { MdSell } from "react-icons/md";
 
 const BestSelled = () => {
   const { bestSelledBooks, isFetching } = useGlobalContext();
@@ -17,10 +16,7 @@ const BestSelled = () => {
 
   return (
     <section id="best-selled" className="best-selled-books">
-      <h2>
-        <MdSell />
-        The New York Times Best Sellers
-      </h2>
+      <h2>The New York Times Best Sellers</h2>
       {isFetching ||
         bestSelledBooks.map((el, i) => {
           if (i > 10) return;
@@ -45,13 +41,13 @@ const BestSelled = () => {
                       <a
                         onClick={async (e) => {
                           e.preventDefault();
-                          console.log(book)
+                          console.log(book);
                           const response = await fetch(
                             `https://www.googleapis.com/books/v1/volumes?q=${book.primary_isbn10}`
                           );
                           const data = await response.json();
                           console.log(data);
-                          navigate(`/book/${data.items[0].id}`)
+                          navigate(`/book/${data.items[0].id}`);
                         }}
                       >
                         <span className="book-rank">{rank}</span>
@@ -65,8 +61,16 @@ const BestSelled = () => {
                               ? `${weeks_on_list} weeks on the list`
                               : `${weeks_on_list} week on the list`}
                           </span>
-                          <h4>{title.length > 35 ? `${title.slice(0, 35)} ...` : title}</h4>
-                          <p>{contributor.length > 35 ? `${contributor.slice(0, 35)} ...` : contributor}</p>
+                          <h4>
+                            {title.length > 35
+                              ? `${title.slice(0, 35)} ...`
+                              : title}
+                          </h4>
+                          <p>
+                            {contributor.length > 35
+                              ? `${contributor.slice(0, 35)} ...`
+                              : contributor}
+                          </p>
                         </div>
                         <BiRightArrowAlt className="card-icon-right-arr" />
                       </a>

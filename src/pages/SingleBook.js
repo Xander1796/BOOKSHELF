@@ -20,7 +20,7 @@ const SingleBook = () => {
 
   const { volumeId } = useParams();
 
-  const { setIsPopupVisible } = useGlobalContext();
+  const { setIsPopupVisible, bookshelf, setBookshelf } = useGlobalContext();
 
   useEffect(() => {
     async function getSingleBook() {
@@ -78,15 +78,69 @@ const SingleBook = () => {
                   : "Unknown author"
               }`}</p>
               <div>
-                <button className="btn regular-btn">
+                <button
+                  className="btn regular-btn"
+                  onClick={() => {
+                    setIsPopupVisible(true);
+                    bookshelf.readingNow.unshift({
+                      volumeId: volumeId,
+                      img: volumeInfo?.imageLinks?.thumbnail
+                        ? volumeInfo.imageLinks.thumbnail
+                        : noImage,
+                      title: volumeInfo?.title
+                        ? volumeInfo.title.slice(0, 35)
+                        : "No title",
+                      author: volumeInfo?.authors?.[0]
+                        ? volumeInfo.authors[0].slice(0, 35)
+                        : "Unknown author",
+                    });
+                    setBookshelf(bookshelf);
+                  }}
+                >
                   <BsBook />
                   Reading Now
                 </button>
-                <button className="btn regular-btn">
+                <button
+                  className="btn regular-btn"
+                  onClick={() => {
+                    setIsPopupVisible(true);
+                    bookshelf.toRead.unshift({
+                      volumeId: volumeId,
+                      img: volumeInfo?.imageLinks?.thumbnail
+                        ? volumeInfo.imageLinks.thumbnail
+                        : noImage,
+                      title: volumeInfo?.title
+                        ? volumeInfo.title.slice(0, 35)
+                        : "No title",
+                      author: volumeInfo?.authors?.[0]
+                        ? volumeInfo.authors[0].slice(0, 35)
+                        : "Unknown author",
+                    });
+                    setBookshelf(bookshelf);
+                  }}
+                >
                   <BsBookmark />
                   Bookmark
                 </button>
-                <button className="btn regular-btn" onClick={() => setIsPopupVisible(true)}>
+                <button
+                  className="btn regular-btn"
+                  onClick={() => {
+                    setIsPopupVisible(true);
+                    bookshelf.finishedBooks.unshift({
+                      volumeId: volumeId,
+                      img: volumeInfo?.imageLinks?.thumbnail
+                        ? volumeInfo.imageLinks.thumbnail
+                        : noImage,
+                      title: volumeInfo?.title
+                        ? volumeInfo.title.slice(0, 35)
+                        : "No title",
+                      author: volumeInfo?.authors?.[0]
+                        ? volumeInfo.authors[0].slice(0, 35)
+                        : "Unknown author",
+                    });
+                    setBookshelf(bookshelf);
+                  }}
+                >
                   <BsPatchCheck />
                   Finished
                 </button>

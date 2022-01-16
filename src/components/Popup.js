@@ -19,7 +19,7 @@ const Popup = () => {
       {isPopupVisible && (
         <div className="popup">
           <BsCheckCircleFill className="check-icon" />
-          Bookshelf updated
+          <span>Bookshelf updated</span>
           <button
             className="popup-close-btn"
             onClick={() => setIsPopupVisible(false)}

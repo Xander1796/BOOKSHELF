@@ -16,11 +16,11 @@ const BookshelfBtn = () => {
 
       <ul className="bookshelf-actions-list">
         {bookshelfBtnData.map((el, i) => {
-          const { title, description, src } = el;
+          const { title, description, src, path } = el;
 
           return (
             <li key={i}>
-              <Link to="">
+              <Link to={path}>
                 <img src={src} className="bookshelf-action-img"></img>
                 <div>
                   <h3 className="bookshelf-action-title">

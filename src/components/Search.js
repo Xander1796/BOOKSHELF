@@ -18,7 +18,7 @@ const Search = () => {
         }
       }}
     >
-      <input id="search" placeholder="Search for books" ref={searchInput} />
+      <input id="search" type="search" placeholder="Search for books" ref={searchInput} />
       <div className="search-wrapper-border"></div>
       <button className="search-button">Search</button>
     </form>

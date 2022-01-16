@@ -8,15 +8,18 @@ export const bookshelfBtnData = [
     title: "Reading now",
     description: "Book/s that you are currently reading",
     src: readingNow,
+    path: "/bookshelf/reading-now",
   },
   {
     title: "To read",
     description: "The books that you have bookmarked for later readings",
     src: toRead,
+    path: "/bookshelf/to-read",
   },
   {
     title: "Finished",
     description: "Books that you finished",
     src: finished,
+    path: "/bookshelf/finished-books",
   },
 ];

@@ -1,10 +1,10 @@
 :root {
-  --accent-color-700: #1a73e8;
+  --accent-color-700: #406aa3;
   --accent-color-600: #174ea6;
-  --accent-color-500: #5b6d86;
+  --accent-color-500: #1a73e8;
 
   --primary-color-700: #202124;
-  --primary-color-600: #707070;
+  --primary-color-600: #5b6d86;
   --primary-color-500: #dadce0;
 
   --secondary-color: #00863e;
@@ -60,7 +60,7 @@ h5 {
 }
 
 p {
-  color: var(--accent-color-500);
+  color: var(--primary-color-600);
 }
 
 .btn {
@@ -96,7 +96,7 @@ p {
   z-index: 1000;
   left: 50%;
   bottom: 3%;
-  transform: translateX(-50%) translateY(100%);
+  transform: translateX(-50%) translateY(100%) scale(.5);
   opacity: 0;
   font-size: 1.8rem;
   border-left: var(--secondary-color) 5px solid;
@@ -110,9 +110,13 @@ p {
 
 @keyframes popup-anim {
   100% {
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0) scale(1);
     opacity: 1;
   }
+}
+
+.popup span {
+  margin-right: .5rem;
 }
 
 .popup .check-icon {
@@ -124,7 +128,7 @@ p {
   position: absolute;
   right: 0%;
   top: 0%;
-  padding: .2rem;
+  padding: 0.2rem;
   cursor: pointer;
   width: fit-content;
   height: fit-content;
@@ -133,12 +137,19 @@ p {
 
 .popup-close-btn svg {
   fill: var(--primary-color-700);
+  border-radius: 50%;
   width: 1.5rem;
   height: auto;
+  transition: .1s ease all;
+}
+
+.popup-close-btn svg:hover {
+  background: var(--secondary-color);
+  fill: #fff;
 }
 
 section {
-  animation: section-anim 0.2s forwards;
+  animation: section-anim 0.4s forwards;
 }
 
 .loading-spinner-wrapper {
@@ -187,10 +198,12 @@ section {
 @keyframes section-anim {
   0% {
     opacity: 0;
+    transform: translateY(10px);
   }
 
   100% {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -208,7 +221,7 @@ body {
 }
 
 .app-logo span {
-  color: var(--accent-color-700);
+  color: var(--accent-color-500);
 }
 
 /* NAVIGATION */
@@ -266,7 +279,7 @@ nav {
 }
 
 .search-button {
-  background: var(--accent-color-700);
+  background: var(--accent-color-500);
   color: #fff;
   font-size: 1.6rem;
   font-weight: 600;
@@ -390,18 +403,24 @@ nav {
 }
 
 .current-reading-book-wrapper {
+  position: relative;
   text-align: center;
   display: inline-block;
   padding: 3rem;
-  max-width: 40rem;
+  width: 40rem;
   height: auto;
   border-radius: 0.5rem;
-  border: 1px dashed #c1c1c1;
+  border: 1px dashed var(--primary-color-500);
 }
 
-.current-reading-book-wrapper img {
+.current-reading-book-wrapper .no-book-img {
   width: 14rem;
   height: auto;
+}
+
+.current-reading-book-wrapper .reading-book-img {
+  width: 11rem;
+  height: 14rem;
 }
 
 .current-reading-book-wrapper h3 {
@@ -409,8 +428,45 @@ nav {
   margin: 2rem 0;
 }
 
+.current-reading-book-wrapper h2 {
+  font-size: 1.8rem;
+  margin-top: 2rem;
+}
+
+.current-reading-book-wrapper p {
+  font-size: 1.6rem;
+  margin: 1rem 0;
+}
+
 .current-reading-book-wrapper .btn svg {
   margin-left: 0.5rem;
+}
+
+.hero-btn-finished {
+  color: var(--secondary-color);
+}
+
+.hero-btn-finished:hover {
+  background: #eafff4;
+}
+
+.hero-btn-finished svg,
+.current-reading-banner svg {
+  margin-right: .5rem;
+}
+
+.current-reading-banner {
+  display: inline-flex;
+   align-items: center;
+   background: #fff;
+   padding: .0 1.5rem;
+   position: absolute;
+   left: 50%;
+   transform: translateX(-50%);
+   font-size: 1.5rem;
+   font-weight: 600;
+   color: var(--accent-color-600);
+   top: -1.5rem;
 }
 
 /* BEST SELLED BOOKS SECTION */
@@ -446,13 +502,23 @@ nav {
   display: flex;
   text-align: center;
   justify-content: center;
-  width: 19%;
-  height: 36rem;
+  width: calc(96% / 5);
+  height: 33rem;
   margin: 1.5rem 0;
   border-radius: 0.5rem;
   border: 1px solid var(--primary-color-500);
   transition: 0.2s ease all;
   cursor: pointer;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: book-anim .4s forwards;
+}
+
+@keyframes book-anim {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .book-list li a {
@@ -464,12 +530,11 @@ nav {
 .book-list li:hover {
   box-shadow: 3px 3px 20px rgb(32 33 36 / 15%);
   border-color: transparent;
-  transform: translateY(-5px);
 }
 
 .book-list img {
-  width: 13rem;
-  height: 16rem;
+  width: 10rem;
+  height: 13rem;
 }
 
 .book-list h4 {
@@ -478,7 +543,7 @@ nav {
 }
 
 .weeks-on-list {
-  color: var(--accent-color-500);
+  color: var(--primary-color-600);
   font-weight: 600;
   font-size: 1.3rem;
   margin-top: 1rem;
@@ -488,7 +553,7 @@ nav {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  color: var(--accent-color-500);
+  color: var(--primary-color-600);
   position: absolute;
   top: 0.5rem;
   left: 1rem;
@@ -507,7 +572,7 @@ nav {
   bottom: 1rem;
   width: 2.5rem;
   height: auto;
-  fill: var(--accent-color-700);
+  fill: var(--accent-color-500);
 }
 
 /* SINGLE BOOK PAGE */
@@ -530,7 +595,7 @@ nav {
 .buy-book-btn {
   width: 100%;
   margin-top: 2rem;
-  background: #406aa3;
+  background: var(--accent-color-700);
   color: #fff;
 }
 
@@ -562,7 +627,7 @@ nav {
 }
 
 .single-book-cta-wrapper button:nth-of-type(1) {
-  color: var(--accent-color-700);
+  color: var(--accent-color-500);
 }
 
 .single-book-cta-wrapper button:nth-of-type(3) {
@@ -589,7 +654,7 @@ nav {
   font-size: 1.6rem;
   transition: 0.3s ease all;
   line-height: 2.5rem;
-  color: var(--accent-color-500);
+  color: var(--primary-color-600);
 }
 
 .book-description-bottom-gradient {
@@ -612,7 +677,7 @@ nav {
 }
 
 .book-description p {
-  color: var(--accent-color-500);
+  color: var(--primary-color-600);
 }
 
 .single-book-description-details .read-more-btn {
@@ -654,6 +719,62 @@ nav {
 }
 
 /* SEARCH SECTION */
-.search-list {
-  margin-top: 10rem;
+.search-section,
+.bookshelf-section {
+  margin-top: 6rem;
+}
+
+.search-section .book-list,
+.bookshelf-section .book-list {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.search-section-title {
+  display: inline-flex;
+  align-items: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.search-section-title svg {
+  margin-right: .5rem;
+}
+
+.search-section-title span {
+  font-weight: 700;
+  color: var(--primary-color-700);
+  margin-left: .7rem;
+}
+
+/* BOOKSHELF SECTION */
+.bookshelf-section h1 {
+  font-size: 2rem;
+  margin-bottom: .5rem;
+}
+
+.bookshelf-section p {
+  font-size: 1.7rem;
+  margin-bottom: 2rem;
+}
+
+.remove-book-btn {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.remove-book-btn a {
+  font-size: 1.3rem;
+  border: 1px solid var(--primary-color-500);
+  border-radius: .5rem;
+  padding: .5rem !important;
+  cursor: pointer;
+  color: #9d6161;
+  font-weight: 500;
+  transition: .2s ease background-color;
+}
+
+.remove-book-btn a:hover {
+  background: #9d61610e;
 }
