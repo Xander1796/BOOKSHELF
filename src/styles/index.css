@@ -96,16 +96,25 @@ p {
   z-index: 1000;
   left: 50%;
   bottom: 3%;
-  transform: translateX(-50%) translateY(100%) scale(.5);
+  transform: translateX(-50%) translateY(100%) scale(0.5);
   opacity: 0;
   font-size: 1.8rem;
-  border-left: var(--secondary-color) 5px solid;
+  border-left: 5px solid;
   border-radius: 0.5rem;
   background: #fff;
   font-weight: 500;
-  color: var(--primary-color-700);
   box-shadow: 3px 3px 20px rgb(32 33 36 / 15%);
   animation: popup-anim 0.2s forwards;
+}
+
+.popup-book-added {
+  color: var(--primary-color-700);
+  border-color: var(--secondary-color);
+}
+
+.popup-book-error {
+  color: #9d6161;
+  border-color: #9d6161;
 }
 
 @keyframes popup-anim {
@@ -116,10 +125,10 @@ p {
 }
 
 .popup span {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
-.popup .check-icon {
+.popup-info-icon {
   fill: var(--secondary-color);
   margin-right: 1rem;
 }
@@ -140,10 +149,15 @@ p {
   border-radius: 50%;
   width: 1.5rem;
   height: auto;
-  transition: .1s ease all;
+  transition: 0.1s ease all;
 }
 
-.popup-close-btn svg:hover {
+.popup-book-error .popup-close-btn svg:hover {
+  background: #9d6161;
+  fill: #fff;
+}
+
+ .popup-book-added .popup-close-btn svg:hover {
   background: var(--secondary-color);
   fill: #fff;
 }
@@ -452,21 +466,21 @@ nav {
 
 .hero-btn-finished svg,
 .current-reading-banner svg {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .current-reading-banner {
   display: inline-flex;
-   align-items: center;
-   background: #fff;
-   padding: .0 1.5rem;
-   position: absolute;
-   left: 50%;
-   transform: translateX(-50%);
-   font-size: 1.5rem;
-   font-weight: 600;
-   color: var(--accent-color-600);
-   top: -1.5rem;
+  align-items: center;
+  background: #fff;
+  padding: 0 1.5rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-color-600);
+  top: -1.5rem;
 }
 
 /* BEST SELLED BOOKS SECTION */
@@ -509,9 +523,6 @@ nav {
   border: 1px solid var(--primary-color-500);
   transition: 0.2s ease all;
   cursor: pointer;
-  opacity: 0;
-  transform: translateY(15px);
-  animation: book-anim .4s forwards;
 }
 
 @keyframes book-anim {
@@ -738,19 +749,19 @@ nav {
 }
 
 .search-section-title svg {
-  margin-right: .5rem;
+  margin-right: 0.5rem;
 }
 
 .search-section-title span {
   font-weight: 700;
   color: var(--primary-color-700);
-  margin-left: .7rem;
+  margin-left: 0.7rem;
 }
 
 /* BOOKSHELF SECTION */
 .bookshelf-section h1 {
   font-size: 2rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .bookshelf-section p {
@@ -767,14 +778,69 @@ nav {
 .remove-book-btn a {
   font-size: 1.3rem;
   border: 1px solid var(--primary-color-500);
-  border-radius: .5rem;
-  padding: .5rem !important;
+  border-radius: 0.5rem;
+  padding: 0.5rem !important;
   cursor: pointer;
   color: #9d6161;
   font-weight: 500;
-  transition: .2s ease background-color;
+  transition: 0.2s ease background-color;
 }
 
 .remove-book-btn a:hover {
   background: #9d61610e;
+}
+
+.empty-bookshelf-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: book-anim .4s forwards;
+}
+
+.empty-bookshelf-wrapper img {
+  width: 15rem;
+  height: auto;
+}
+
+.empty-bookshelf-wrapper h1 {
+  margin-top: 2rem;
+}
+
+.empty-bookshelf-wrapper a, .empty-bookshelf-wrapper button {
+  color: var(--accent-color-500);
+  font-weight: 500;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+/* ERROR SECTION */
+
+.error-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8rem;
+  width: 100%;
+}
+
+.error-section svg {
+  width: 11rem;
+  height: auto;
+}
+
+.error-section svg {
+  fill: #9d6161;
+}
+
+.error-section h1 {
+  font-size: 2.2rem;
+  margin-top: 2rem;
+}
+
+.error-section .btn {
+  margin-top: 2rem;
 }

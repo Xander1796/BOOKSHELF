@@ -8,7 +8,22 @@ import noBookSvg from "../assets/svg/no-book.svg";
 import { BsPin, BsBook } from "react-icons/bs";
 
 const Hero = () => {
-  const { searchInput, bookshelf } = useGlobalContext();
+  const { searchInput, bookshelf, setBookshelf } = useGlobalContext();
+
+  const markBookAsFinished = () => {
+    const isBookInFinishedList = bookshelf.finishedBooks.some(
+      (book) => book.volumeId === bookshelf.readingNow[0].volumeId
+    );
+
+    if (isBookInFinishedList === false) {
+      bookshelf.finishedBooks.unshift(bookshelf.readingNow[0]);
+    }
+
+    bookshelf.readingNow.shift();
+
+    setBookshelf(bookshelf);
+    localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+  };
 
   return (
     <section className="hero-section">
@@ -52,7 +67,10 @@ const Hero = () => {
             </Link>
             <h2>{bookshelf.readingNow[0].title}</h2>
             <p>{`By ${bookshelf.readingNow[0].author}`}</p>
-            <button className="btn hero-btn-finished">
+            <button
+              className="btn hero-btn-finished"
+              onClick={markBookAsFinished}
+            >
               <BsPin />
               Mark as finished
             </button>

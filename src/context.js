@@ -3,20 +3,30 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [isVisible, setIsVisible] = useState(false);
   let [bestSelledBooks, setBestSelledBooks] = useState(["something"]);
   const [isFetching, setIsFetching] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInput = useRef();
-  const [totalSearchPages, setTotalSearchPages] = useState(1);
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("Bookshelf updated");
 
-  const [bookshelf, setBookshelf] = useState({
-    readingNow: [],
-    toRead: [],
-    finishedBooks: [],
-  });
+  let localStorageBookshelf = localStorage.getItem("bookshelf");
+
+  if (!localStorageBookshelf) {
+    localStorage.setItem(
+      "bookshelf",
+      JSON.stringify({
+        readingNow: [],
+        toRead: [],
+        finishedBooks: [],
+      })
+    );
+  }
+
+  const [bookshelf, setBookshelf] = useState(
+    JSON.parse(localStorage.getItem("bookshelf"))
+  );
 
   const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
@@ -24,14 +34,18 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     async function getBestSelledBooks() {
-      setIsFetching(true);
-      const data = await fetch(
-        `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${nytKey}`
-      );
-      const response = await data.json();
-      setBestSelledBooks(response.results.lists);
-      setIsFetching(false);
-      console.log("yes");
+      try {
+        setIsFetching(true);
+        const data = await fetch(
+          `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${nytKey}`
+        );
+        const response = await data.json();
+        setBestSelledBooks(response.results.lists);
+        setIsFetching(false);
+        console.log("yes");
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     getBestSelledBooks();
@@ -40,19 +54,17 @@ const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider
       value={{
-        isVisible,
-        setIsVisible,
         bestSelledBooks,
         isFetching,
         searchQuery,
         setSearchQuery,
-        totalSearchPages,
-        setTotalSearchPages,
         searchInput,
         setIsPopupVisible,
         isPopupVisible,
+        popupMessage,
+        setPopupMessage,
         bookshelf,
-        setBookshelf
+        setBookshelf,
       }}
     >
       {children}

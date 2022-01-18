@@ -1,6 +1,5 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import noImage from "../assets/svg/no-image.png";
+import { Link, useLocation } from "react-router-dom";
 
 import { useGlobalContext } from "../context";
 
@@ -12,7 +11,6 @@ const BookshelfBook = (props) => {
   const { searchInput, bookshelf, setBookshelf } = useGlobalContext();
   const { volumeId, img, title, author } = props;
 
-  const navigate = useNavigate();
   const location = useLocation();
 
   console.log(bookshelf[props.currentBookshelfName]);
@@ -38,6 +36,7 @@ const BookshelfBook = (props) => {
           );
           bookshelf[props.currentBookshelfName] = newBookshelf;
           setBookshelf(bookshelf);
+          localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
         }}
       >
         <Link to={location}>Remove</Link>

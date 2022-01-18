@@ -9,28 +9,29 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { v4 as uniqueId } from "uuid";
 
 const SearchResults = () => {
-  let { searchQuery, setTotalSearchPages, setSearchQuery } = useGlobalContext();
+  let { searchQuery, setSearchQuery } = useGlobalContext();
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const getSearchResults = async () => {
-      setSearchQuery(searchParams.get("q"));
+      try {
+        setSearchQuery(searchParams.get("q"));
 
-      setIsLoading(true);
-      const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchParams.get(
-          "q"
-        )}&maxResults=20&printType=books`
-      );
-      const data = await response.json();
-      console.log(data);
-      setSearchResults(data.items);
-      setTotalSearchPages(
-        Math.ceil(Number(data.totalItems) / data.items.length)
-      );
-      setIsLoading(false);
+        setIsLoading(true);
+        const response = await fetch(
+          `https://www.googleapis.com/books/v1/volumes?q=${searchParams.get(
+            "q"
+          )}&maxResults=20&printType=books`
+        );
+        const data = await response.json();
+        console.log(data);
+        setSearchResults(data.items);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     getSearchResults();

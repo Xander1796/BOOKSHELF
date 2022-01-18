@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 import { useParams } from "react-router-dom";
@@ -20,7 +19,13 @@ const SingleBook = () => {
 
   const { volumeId } = useParams();
 
-  const { setIsPopupVisible, bookshelf, setBookshelf } = useGlobalContext();
+  const {
+    isPopupVisible,
+    setIsPopupVisible,
+    setPopupMessage,
+    bookshelf,
+    setBookshelf,
+  } = useGlobalContext();
 
   useEffect(() => {
     async function getSingleBook() {
@@ -36,7 +41,7 @@ const SingleBook = () => {
 
         setIsLoading(false);
       } catch (error) {
-        alert(error);
+        console.log(error);
       }
     }
 
@@ -44,6 +49,32 @@ const SingleBook = () => {
   }, [volumeId]);
 
   const { volumeInfo, saleInfo } = singleBook;
+
+  const setBook = (typeOfBookshelf) => {
+    setIsPopupVisible(!isPopupVisible);
+    if (bookshelf[typeOfBookshelf].some((book) => book.volumeId === volumeId)) {
+      setPopupMessage("This book is already in your bookshelf");
+      return;
+    }
+
+    setPopupMessage("Bookshelf updated");
+
+    const book = {
+      volumeId: volumeId,
+      img: volumeInfo?.imageLinks?.thumbnail
+        ? volumeInfo.imageLinks.thumbnail
+        : noImage,
+      title: volumeInfo?.title ? volumeInfo.title.slice(0, 35) : "No title",
+      author: volumeInfo?.authors?.[0]
+        ? volumeInfo.authors[0].slice(0, 35)
+        : "Unknown author",
+    };
+
+    bookshelf[typeOfBookshelf].unshift(book);
+    setBookshelf(bookshelf);
+
+    localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+  };
 
   return (
     <>
@@ -64,6 +95,7 @@ const SingleBook = () => {
                 <a
                   href={saleInfo?.buyLink}
                   target="_blank"
+                  rel="noreferrer"
                   className="btn buy-book-btn"
                 >
                   Buy this book
@@ -81,20 +113,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setIsPopupVisible(true);
-                    bookshelf.readingNow.unshift({
-                      volumeId: volumeId,
-                      img: volumeInfo?.imageLinks?.thumbnail
-                        ? volumeInfo.imageLinks.thumbnail
-                        : noImage,
-                      title: volumeInfo?.title
-                        ? volumeInfo.title.slice(0, 35)
-                        : "No title",
-                      author: volumeInfo?.authors?.[0]
-                        ? volumeInfo.authors[0].slice(0, 35)
-                        : "Unknown author",
-                    });
-                    setBookshelf(bookshelf);
+                    setBook("readingNow");
                   }}
                 >
                   <BsBook />
@@ -103,20 +122,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setIsPopupVisible(true);
-                    bookshelf.toRead.unshift({
-                      volumeId: volumeId,
-                      img: volumeInfo?.imageLinks?.thumbnail
-                        ? volumeInfo.imageLinks.thumbnail
-                        : noImage,
-                      title: volumeInfo?.title
-                        ? volumeInfo.title.slice(0, 35)
-                        : "No title",
-                      author: volumeInfo?.authors?.[0]
-                        ? volumeInfo.authors[0].slice(0, 35)
-                        : "Unknown author",
-                    });
-                    setBookshelf(bookshelf);
+                    setBook("toRead");
                   }}
                 >
                   <BsBookmark />
@@ -125,20 +131,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setIsPopupVisible(true);
-                    bookshelf.finishedBooks.unshift({
-                      volumeId: volumeId,
-                      img: volumeInfo?.imageLinks?.thumbnail
-                        ? volumeInfo.imageLinks.thumbnail
-                        : noImage,
-                      title: volumeInfo?.title
-                        ? volumeInfo.title.slice(0, 35)
-                        : "No title",
-                      author: volumeInfo?.authors?.[0]
-                        ? volumeInfo.authors[0].slice(0, 35)
-                        : "Unknown author",
-                    });
-                    setBookshelf(bookshelf);
+                    setBook("finishedBooks");
                   }}
                 >
                   <BsPatchCheck />

@@ -42,12 +42,16 @@ const BestSelled = () => {
                         onClick={async (e) => {
                           e.preventDefault();
                           console.log(book);
-                          const response = await fetch(
-                            `https://www.googleapis.com/books/v1/volumes?q=${book.primary_isbn10}`
-                          );
-                          const data = await response.json();
-                          console.log(data);
-                          navigate(`/book/${data.items[0].id}`);
+                          try {
+                            const response = await fetch(
+                              `https://www.googleapis.com/books/v1/volumes?q=${book.primary_isbn10}`
+                            );
+                            const data = await response.json();
+                            console.log(data);
+                            navigate(`/book/${data.items[0].id}`);
+                          } catch (error) {
+                            navigate('/error')
+                          }
                         }}
                       >
                         <span className="book-rank">{rank}</span>

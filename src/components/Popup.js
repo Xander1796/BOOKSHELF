@@ -1,28 +1,56 @@
 import React, { useEffect } from "react";
 
 import { BsCheckCircleFill } from "react-icons/bs";
+import { BiError } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { useGlobalContext } from "../context";
 
+let timeout = undefined;
+
 const Popup = () => {
-  const { isPopupVisible, setIsPopupVisible } = useGlobalContext();
+  const { isPopupVisible, setIsPopupVisible, popupMessage } =
+    useGlobalContext();
 
   useEffect(() => {
-    if (isPopupVisible)
-      setTimeout(() => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = undefined;
+      setIsPopupVisible(true);
+      console.log("yes");
+    }
+
+    if (isPopupVisible) {
+      timeout = setTimeout(() => {
         setIsPopupVisible(false);
-      }, 4000);
+        timeout = undefined;
+      }, 5000);
+    }
+    console.log(timeout);
   }, [isPopupVisible]);
 
   return (
     <>
       {isPopupVisible && (
-        <div className="popup">
-          <BsCheckCircleFill className="check-icon" />
-          <span>Bookshelf updated</span>
+        <div
+          className={`popup ${
+            popupMessage === "Bookshelf updated"
+              ? "popup-book-added"
+              : "popup-book-error"
+          }`}
+        >
+          {popupMessage === "Bookshelf updated" ? (
+            <BsCheckCircleFill className="popup-info-icon" />
+          ) : (
+            <BiError className="popup-info-icon" />
+          )}
+          <span>{popupMessage}</span>
           <button
             className="popup-close-btn"
-            onClick={() => setIsPopupVisible(false)}
+            onClick={() => {
+              clearTimeout(timeout);
+              timeout = undefined;
+              setIsPopupVisible(false);
+            }}
           >
             <IoClose />
           </button>
