@@ -21,7 +21,7 @@ const BookshelfBtn = () => {
           return (
             <li key={i}>
               <Link to={path}>
-                <img src={src} className="bookshelf-action-img"></img>
+                <img src={src} alt={description} className="bookshelf-action-img"></img>
                 <div>
                   <h3 className="bookshelf-action-title">
                     {title}

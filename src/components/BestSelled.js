@@ -37,7 +37,7 @@ const BestSelled = () => {
                   } = book;
                   const id = uniqueId();
                   return (
-                    <li key={id}>
+                    <li className="book" key={id}>
                       <a
                         onClick={async (e) => {
                           e.preventDefault();

@@ -9,7 +9,10 @@ const AppProvider = ({ children }) => {
   const searchInput = useRef();
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("Bookshelf updated");
+  const [popupProperties, setPopupProperties] = useState({
+    message: "",
+    type: ""
+  });
 
   let localStorageBookshelf = localStorage.getItem("bookshelf");
 
@@ -18,7 +21,7 @@ const AppProvider = ({ children }) => {
       "bookshelf",
       JSON.stringify({
         readingNow: [],
-        toRead: [],
+        bookmarks: [],
         finishedBooks: [],
       })
     );
@@ -61,8 +64,8 @@ const AppProvider = ({ children }) => {
         searchInput,
         setIsPopupVisible,
         isPopupVisible,
-        popupMessage,
-        setPopupMessage,
+        popupProperties,
+        setPopupProperties,
         bookshelf,
         setBookshelf,
       }}

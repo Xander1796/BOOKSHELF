@@ -14,7 +14,7 @@ const SearchBook = (book) => {
   const { searchInput } = useGlobalContext();
 
   return (
-    <li>
+    <li className="book">
       <Link to={`/book/${volumeId}`} onClick={() => (searchInput.current.value = "")}>
         <img
           src={imageLinks?.thumbnail ? imageLinks.thumbnail : noImage}

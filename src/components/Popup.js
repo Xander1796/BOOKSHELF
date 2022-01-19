@@ -8,7 +8,7 @@ import { useGlobalContext } from "../context";
 let timeout = undefined;
 
 const Popup = () => {
-  const { isPopupVisible, setIsPopupVisible, popupMessage } =
+  const { isPopupVisible, setIsPopupVisible, popupProperties } =
     useGlobalContext();
 
   useEffect(() => {
@@ -23,27 +23,27 @@ const Popup = () => {
       timeout = setTimeout(() => {
         setIsPopupVisible(false);
         timeout = undefined;
-      }, 5000);
+      }, 7000);
     }
     console.log(timeout);
-  }, [isPopupVisible]);
+  }, [isPopupVisible, setIsPopupVisible]);
 
   return (
     <>
       {isPopupVisible && (
         <div
           className={`popup ${
-            popupMessage === "Bookshelf updated"
+            popupProperties.type === "ok"
               ? "popup-book-added"
               : "popup-book-error"
           }`}
         >
-          {popupMessage === "Bookshelf updated" ? (
+          {popupProperties.type === "ok" ? (
             <BsCheckCircleFill className="popup-info-icon" />
           ) : (
             <BiError className="popup-info-icon" />
           )}
-          <span>{popupMessage}</span>
+          <span>{popupProperties.message}</span>
           <button
             className="popup-close-btn"
             onClick={() => {

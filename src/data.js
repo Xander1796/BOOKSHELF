@@ -11,10 +11,10 @@ export const bookshelfBtnData = [
     path: "/bookshelf/reading-now",
   },
   {
-    title: "To read",
+    title: "Bookmarks",
     description: "The books that you have bookmarked for later readings",
     src: toRead,
-    path: "/bookshelf/to-read",
+    path: "/bookshelf/bookmarks",
   },
   {
     title: "Finished",

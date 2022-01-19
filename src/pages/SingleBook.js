@@ -22,7 +22,7 @@ const SingleBook = () => {
   const {
     isPopupVisible,
     setIsPopupVisible,
-    setPopupMessage,
+    setPopupProperties,
     bookshelf,
     setBookshelf,
   } = useGlobalContext();
@@ -52,12 +52,30 @@ const SingleBook = () => {
 
   const setBook = (typeOfBookshelf) => {
     setIsPopupVisible(!isPopupVisible);
-    if (bookshelf[typeOfBookshelf].some((book) => book.volumeId === volumeId)) {
-      setPopupMessage("This book is already in your bookshelf");
-      return;
+
+    const newBk = [...Object.values(bookshelf)];
+
+    for (let i = 0; i < newBk.length; i++) {
+      for (let j = 0; j < newBk[i].length; j++) {
+        if (newBk[i][j].volumeId === volumeId) {
+          setPopupProperties({
+            message: "This book is already in your bookshelf",
+            type: "error"
+          });
+          return;
+        }
+      }
     }
 
-    setPopupMessage("Bookshelf updated");
+    // if (bookshelf[typeOfBookshelf].some((book) => book.volumeId === volumeId)) {
+    //   setPopupProperties("This book is already in your bookshelf");
+    //   return;
+    // }
+
+    setPopupProperties({
+      message: "Bookshelf updated",
+      type: "ok"
+    });
 
     const book = {
       volumeId: volumeId,
@@ -122,7 +140,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setBook("toRead");
+                    setBook("bookmarks");
                   }}
                 >
                   <BsBookmark />

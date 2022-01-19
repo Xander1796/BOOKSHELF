@@ -21,7 +21,7 @@ const App = () => {
         <Route path="/book/:volumeId" element={<SingleBook />}></Route>
         <Route path="/search" element={<SearchResults />}></Route>
         <Route path="/bookshelf/reading-now" element={<Bookshelf />}></Route>
-        <Route path="/bookshelf/to-read" element={<Bookshelf />}></Route>
+        <Route path="/bookshelf/bookmarks" element={<Bookshelf />}></Route>
         <Route path="/bookshelf/finished-books" element={<Bookshelf />}></Route>
         <Route path="/error" element={<Error />}></Route>
         <Route path="*" element={<Error />}></Route>
