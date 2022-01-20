@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
@@ -8,14 +8,16 @@ import noBookSvg from "../assets/svg/no-book.svg";
 import { BsPin, BsBook } from "react-icons/bs";
 
 const Hero = () => {
-  const { searchInput, bookshelf, setBookshelf } = useGlobalContext();
-  const [isCurrentlyReading, setIsCurrentlyReading] = useState(false);
+  const {
+    searchInput,
+    bookshelf,
+    setBookshelf,
+    setIsPopupVisible,
+    isPopupVisible,
+    setPopupProperties,
+  } = useGlobalContext();
 
-  useEffect(() => {
-    console.log(bookshelf.readingNow.length);
-    if (bookshelf.readingNow.length > 0) setIsCurrentlyReading(true);
-    if (bookshelf.readingNow.length === 0) setIsCurrentlyReading(false);
-  }, [isCurrentlyReading]);
+  const wrapy = useRef();
 
   const markBookAsFinished = () => {
     const isBookInFinishedList = bookshelf.finishedBooks.some(
@@ -26,13 +28,24 @@ const Hero = () => {
       bookshelf.finishedBooks.unshift(bookshelf.readingNow[0]);
     }
 
-    bookshelf.readingNow.shift();
 
-    setBookshelf(bookshelf);
-    localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+    wrapy.current.classList.add("anim-out");
 
-    setIsCurrentlyReading(!isCurrentlyReading);
+    setTimeout(() => {
+      setPopupProperties({
+        message: `${bookshelf.readingNow[0].title} has been added to Finished`,
+        type: "ok",
+      });
+
+      setIsPopupVisible(!isPopupVisible);
+
+      bookshelf.readingNow.shift();
+
+      setBookshelf(bookshelf);
+      localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+    }, 200);
   };
+  console.log("rendering HERO SECTION");
 
   return (
     <section className="hero-section">
@@ -45,8 +58,15 @@ const Hero = () => {
         </a>
       </div>
 
-      <div className="current-reading-book-wrapper">
-        {isCurrentlyReading || (
+      <div
+        className="current-reading-book-wrapper"
+        ref={wrapy}
+        onAnimationEnd={() => {
+          wrapy.current.classList.add("anim-in");
+          wrapy.current.classList.remove("anim-out");
+        }}
+      >
+        {bookshelf.readingNow.length === 0 && (
           <>
             <img
               src={noBookSvg}
@@ -65,7 +85,7 @@ const Hero = () => {
           </>
         )}
 
-        {isCurrentlyReading && (
+        {bookshelf.readingNow.length > 0 && (
           <>
             <Link to={`/book/${bookshelf.readingNow[0].volumeId}`}>
               <img

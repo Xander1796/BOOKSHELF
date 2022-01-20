@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useGlobalContext } from "../context";
-import BookshelfBook from "../components/BookshelfBook";
+import BookshelfItem from "../components/BookshelfItem";
 import EmptyBookshelf from "../components/EmptyBookshelf";
 import { useLocation } from "react-router-dom";
 
@@ -49,7 +49,7 @@ const Bookshelf = () => {
               {currentBookshelf.map((book) => {
                 const id = uniqueId();
                 return (
-                  <BookshelfBook
+                  <BookshelfItem
                     {...book}
                     currentBookshelf={currentBookshelf}
                     currentBookshelfName={currentBookshelfName}

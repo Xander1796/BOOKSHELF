@@ -37,10 +37,6 @@ button {
   background: none;
 }
 
-button:active {
-  transform: scale(.95);
-}
-
 a {
   text-decoration: none;
   display: inline-block;
@@ -78,10 +74,6 @@ p {
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s ease all;
-}
-
-.btn svg {
-  width: 1.6rem !important;
 }
 
 .regular-btn {
@@ -432,6 +424,43 @@ nav {
   border: 1px dashed var(--primary-color-500);
 }
 
+.anim-in {
+  animation: anim-in .2s forwards;
+}
+
+.anim-out {
+  animation: anim-out .4s forwards;
+}
+
+@keyframes anim-in {
+  0% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes anim-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  50% {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+  
+  100% {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+}
+
 .current-reading-book-wrapper .no-book-img {
   width: 14rem;
   height: auto;
@@ -503,9 +532,27 @@ nav {
   height: auto;
 }
 
+.best-selled-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4rem 0 2rem 0;
+}
+
+.best-selled-title-wrapper a {
+  font-size: 1.3rem;
+  padding: .5rem;
+  background: var(--accent-color-700);
+  color: #fff;
+  border: none;
+}
+
+.best-selled-title-wrapper a:hover {
+  background: #36598a;
+}
+
 .best-selled-books h3 {
   font-size: 1.8rem;
-  margin: 4rem 0 2rem 0;
 }
 
 .book-list {
@@ -589,6 +636,18 @@ li.book > a:hover {
   width: 2.5rem;
   height: auto;
   fill: var(--accent-color-500);
+}
+
+/*TOP 15 SECTION */
+
+.top-15-section h1 {
+  font-size: 2rem;
+}
+
+.top-15-section h3 {
+  font-size: 1.5rem;
+  color: var(--primary-color-600);
+  margin-bottom: 2rem;
 }
 
 /* SINGLE BOOK PAGE */
@@ -736,7 +795,8 @@ li.book > a:hover {
 
 /* SEARCH SECTION */
 .search-section,
-.bookshelf-section {
+.bookshelf-section,
+.top-15-section {
   margin-top: 6rem;
 }
 

@@ -8,7 +8,7 @@ import { useGlobalContext } from "../context";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { IoIosArrowDown } from "react-icons/io";
 
-const BookshelfBook = (props) => {
+const BookshelfItem = (props) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const {
@@ -135,4 +135,4 @@ const BookshelfBook = (props) => {
   );
 };
 
-export default BookshelfBook;
+export default BookshelfItem;

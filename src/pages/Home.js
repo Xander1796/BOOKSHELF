@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import BestSelled from "../components/BestSelled";
+import BestSelledSection from "../components/BestSelledSection";
 
 
 //components
@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Hero />
-      <BestSelled />
+      <BestSelledSection />
     </>
   );
 };
