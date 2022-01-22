@@ -11,57 +11,35 @@ import { IoIosArrowDown } from "react-icons/io";
 const BookshelfItem = (props) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-  const {
-    searchInput,
-    bookshelf,
-    setBookshelf,
-    isPopupVisible,
-    setIsPopupVisible,
-    setPopupProperties,
-  } = useGlobalContext();
+  const { searchInput, bookshelves, setBookshelves, showPopup } =
+    useGlobalContext();
   const { volumeId, img, title, author } = props;
 
   const location = useLocation();
 
-  const camelCaseToNormalString = (string) => {
-    let lowerCaseString = string
-      .split(/(?=[A-Z])/)
-      .join(" ")
-      .toLowerCase();
-    let makeFirstLetterUppercase = lowerCaseString[0].toUpperCase();
-    let resultedString =
-      makeFirstLetterUppercase + lowerCaseString.substring(1);
+  const indexOfCurrentBookshelf = bookshelves.findIndex(
+    (bookshelf) =>
+      bookshelf.bookshelfName === props.currentBookshelf.bookshelfName
+  );
 
-    return resultedString;
-  };
-
-  const bookshelfKeys = Object.keys(bookshelf);
-
-  let bookshelfTitlesAndKeys = bookshelfKeys.map((item) => {
-    return {
-      key: item,
-      title: camelCaseToNormalString(item),
-    };
-  });
-
-  const moveBook = (item) => {
-    const targetedBook = props.currentBookshelf.find(
-      (item) => item.volumeId === volumeId
-    );
-
-    bookshelf[item.key] = [targetedBook, ...bookshelf[item.key]];
+  const moveBook = (bookshelf) => {
+    bookshelves[bookshelves.indexOf(bookshelf)].books = [
+      props.book,
+      ...bookshelves[bookshelves.indexOf(bookshelf)].books,
+    ];
   };
 
   const removeBook = () => {
-    const newBookshelf = props.currentBookshelf.filter(
+    const newBooks = props.currentBookshelf.books.filter(
       (item) => item.volumeId !== volumeId
     );
-    bookshelf[props.currentBookshelfName] = newBookshelf;
-    setBookshelf(bookshelf);
-    localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+    bookshelves[indexOfCurrentBookshelf].books = newBooks;
+    
+    setBookshelves(bookshelves);
+    localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
   };
 
-
+  console.log('RENDERING BOOKSHELF ITEM')
   return (
     <li className="book">
       <div className="move-book-wrapper">
@@ -80,31 +58,37 @@ const BookshelfItem = (props) => {
             isDropdownVisible && "move-book-drop-visible"
           }`}
         >
-          {bookshelfTitlesAndKeys.map((item) => {
-            if(item.title === props.bookshelfTitle) return;
-            console.log(item.title, props.bookshelfTitle)
+          {bookshelves.map((bookshelf, i) => {
+            if (
+              bookshelf.bookshelfName === props.currentBookshelf.bookshelfName
+            )
+              return;
+
             return (
               <Link
                 to={location}
+                key={i}
                 className="move-book-option"
                 onClick={() => {
-                  moveBook(item);
+                  moveBook(bookshelf);
                   removeBook();
 
-                  setIsPopupVisible(!isPopupVisible);
-                  setPopupProperties({
-                    message: `${title} has been moved to ${item.title}`,
+                  showPopup({
+                    isPopupVisible: true,
+                    link: `bookshelf${bookshelf.route}`,
+                    bookName: title,
+                    message: `has been moved to ${bookshelf.bookshelfName}`,
                     type: "ok",
                   });
                 }}
               >
-                {item.title} <BiRightArrowAlt />
+                {bookshelf.bookshelfName} <BiRightArrowAlt />
               </Link>
             );
           })}
         </ul>
       </div>
-      
+
       <Link
         to={`/book/${volumeId}`}
         onClick={() => (searchInput.current.value = "")}
@@ -122,9 +106,11 @@ const BookshelfItem = (props) => {
         onClick={() => {
           removeBook();
 
-          setIsPopupVisible(!isPopupVisible);
-          setPopupProperties({
-            message: `${title} has been removed`,
+          showPopup({
+            isPopupVisible: true,
+            link: "",
+            bookName: title,
+            message: `has been removed`,
             type: "ok",
           });
         }}

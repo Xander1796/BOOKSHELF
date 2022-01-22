@@ -5,45 +5,48 @@ import { Link } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
 import noBookSvg from "../assets/svg/no-book.svg";
-import { BsPin, BsBook } from "react-icons/bs";
+import { BsBook } from "react-icons/bs";
+import { AiOutlineCheckCircle } from "react-icons/ai";
 
 const Hero = () => {
-  const {
-    searchInput,
-    bookshelf,
-    setBookshelf,
-    setIsPopupVisible,
-    isPopupVisible,
-    setPopupProperties,
-  } = useGlobalContext();
+  const { showPopup, searchInput, bookshelves, setBookshelves } =
+    useGlobalContext();
 
-  const wrapy = useRef();
+  const finishedBooksIndex = bookshelves.findIndex(
+    (bookshelf) => bookshelf.bookshelfName === "Finished books"
+  );
+
+  const readingNowIndex = bookshelves.findIndex(
+    (bookshelf) => bookshelf.bookshelfName === "Reading now"
+  );
+
+  useEffect(() => {
+   console.log("bookshelves changed")
+  }, [bookshelves])
 
   const markBookAsFinished = () => {
-    const isBookInFinishedList = bookshelf.finishedBooks.some(
-      (book) => book.volumeId === bookshelf.readingNow[0].volumeId
+    const isBookInFinishedList = bookshelves[finishedBooksIndex].books.some(
+      (book) => book.volumeId === bookshelves[finishedBooksIndex].books.volumeId
     );
 
     if (isBookInFinishedList === false) {
-      bookshelf.finishedBooks.unshift(bookshelf.readingNow[0]);
+      bookshelves[finishedBooksIndex].books.unshift(
+        bookshelves[readingNowIndex].books[0]
+      );
     }
 
+    showPopup({
+      isPopupVisible: true,
+      link: `bookshelf${bookshelves[readingNowIndex].route}`,
+      bookName: bookshelves[readingNowIndex].books[0].title,
+      message: `has been added to Finished`,
+      type: "ok",
+    });
 
-    wrapy.current.classList.add("anim-out");
+    bookshelves[readingNowIndex].books.shift();
 
-    setTimeout(() => {
-      setPopupProperties({
-        message: `${bookshelf.readingNow[0].title} has been added to Finished`,
-        type: "ok",
-      });
-
-      setIsPopupVisible(!isPopupVisible);
-
-      bookshelf.readingNow.shift();
-
-      setBookshelf(bookshelf);
-      localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
-    }, 200);
+    setBookshelves(bookshelves);
+    localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
   };
   console.log("rendering HERO SECTION");
 
@@ -58,16 +61,9 @@ const Hero = () => {
         </a>
       </div>
 
-      <div
-        className="current-reading-book-wrapper"
-        ref={wrapy}
-        onAnimationEnd={() => {
-          wrapy.current.classList.add("anim-in");
-          wrapy.current.classList.remove("anim-out");
-        }}
-      >
-        {bookshelf.readingNow.length === 0 && (
-          <>
+      <div className="current-reading-book-wrapper">
+        {bookshelves[readingNowIndex].books.length === 0 && (
+          <div>
             <img
               src={noBookSvg}
               alt="You are not reading anything at the moment"
@@ -82,32 +78,34 @@ const Hero = () => {
               Find something to read
               <BiRightArrowAlt />
             </button>
-          </>
+          </div>
         )}
 
-        {bookshelf.readingNow.length > 0 && (
-          <>
-            <Link to={`/book/${bookshelf.readingNow[0].volumeId}`}>
+        {bookshelves[readingNowIndex].books.length > 0 && (
+          <div>
+            <Link
+              to={`/book/${bookshelves[readingNowIndex].books[0].volumeId}`}
+            >
               <img
-                src={bookshelf.readingNow[0].img}
-                alt={bookshelf.readingNow[0].title}
+                src={bookshelves[readingNowIndex].books[0].img}
+                alt={bookshelves[readingNowIndex].books[0].title}
                 className="reading-book-img"
               />
             </Link>
-            <h2>{bookshelf.readingNow[0].title}</h2>
-            <p>{`By ${bookshelf.readingNow[0].author}`}</p>
+            <h2>{bookshelves[readingNowIndex].books[0].title}</h2>
+            <p>{`By ${bookshelves[readingNowIndex].books[0].author}`}</p>
             <button
               className="btn hero-btn-finished"
               onClick={markBookAsFinished}
             >
-              Mark as finished
-              <BsPin />
+              Finished
+              <AiOutlineCheckCircle />
             </button>
             <span className="current-reading-banner">
               <BsBook />
               Currently reading
             </span>
-          </>
+          </div>
         )}
       </div>
     </section>

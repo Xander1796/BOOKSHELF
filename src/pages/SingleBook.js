@@ -9,7 +9,7 @@ import noImage from "../assets/svg/no-image.png";
 //icons
 import { BsBook, BsBookmark, BsPatchCheck } from "react-icons/bs";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { AiFillStar } from "react-icons/ai";
+import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
 
 const SingleBook = () => {
   const [readMore, setReadMore] = useState(false);
@@ -19,13 +19,8 @@ const SingleBook = () => {
 
   const { volumeId } = useParams();
 
-  const {
-    isPopupVisible,
-    setIsPopupVisible,
-    setPopupProperties,
-    bookshelf,
-    setBookshelf,
-  } = useGlobalContext();
+  const { showPopup, bookshelves, setBookshelves} =
+    useGlobalContext();
 
   useEffect(() => {
     async function getSingleBook() {
@@ -50,31 +45,27 @@ const SingleBook = () => {
 
   const { volumeInfo, saleInfo } = singleBook;
 
-  const setBook = (typeOfBookshelf) => {
-    setIsPopupVisible(!isPopupVisible);
-
-    const newBk = [...Object.values(bookshelf)];
-
-    for (let i = 0; i < newBk.length; i++) {
-      for (let j = 0; j < newBk[i].length; j++) {
-        if (newBk[i][j].volumeId === volumeId) {
-          setPopupProperties({
-            message: "This book is already in your bookshelf",
-            type: "error"
+  const setBook = (typeOfBookshelf, route, name) => {
+    for (let i = 0; i < bookshelves.length; i++) {
+      for (let j = 0; j < bookshelves[i].books.length; j++) {
+        if (bookshelves[i].books[j].volumeId === volumeId) {
+          showPopup({
+            isPopupVisible: true,
+            link: `bookshelf${bookshelves[i].route}`,
+            message: `This book is already in ${typeOfBookshelf}`,
+            type: "error",
           });
           return;
         }
       }
     }
 
-    // if (bookshelf[typeOfBookshelf].some((book) => book.volumeId === volumeId)) {
-    //   setPopupProperties("This book is already in your bookshelf");
-    //   return;
-    // }
-
-    setPopupProperties({
-      message: "Bookshelf updated",
-      type: "ok"
+    showPopup({
+      isPopupVisible: true,
+      link: `/bookshelf${route}`,
+      bookName: volumeInfo?.title.slice(0, 35),
+      message: `has been added to ${typeOfBookshelf}`,
+      type: "ok",
     });
 
     const book = {
@@ -88,10 +79,14 @@ const SingleBook = () => {
         : "Unknown author",
     };
 
-    bookshelf[typeOfBookshelf].unshift(book);
-    setBookshelf(bookshelf);
+    const targetedBookshelfIndex = bookshelves.findIndex(
+      (bookshelf) => bookshelf.bookshelfName === typeOfBookshelf
+    );
 
-    localStorage.setItem("bookshelf", JSON.stringify(bookshelf));
+    bookshelves[targetedBookshelfIndex].books.unshift(book);
+    setBookshelves(bookshelves);
+
+    localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
   };
 
   return (
@@ -131,7 +126,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setBook("readingNow");
+                    setBook("Reading now", "/reading-now", "Reading now");
                   }}
                 >
                   <BsBook />
@@ -140,7 +135,7 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setBook("bookmarks");
+                    setBook("Bookmarks", "/bookmarks", "Bookmarks");
                   }}
                 >
                   <BsBookmark />
@@ -149,10 +144,14 @@ const SingleBook = () => {
                 <button
                   className="btn regular-btn"
                   onClick={() => {
-                    setBook("finishedBooks");
+                    setBook(
+                      "Finished books",
+                      "/finished-books",
+                      "Finished books"
+                    );
                   }}
                 >
-                  <BsPatchCheck />
+                  <AiOutlineCheckCircle />
                   Finished
                 </button>
               </div>

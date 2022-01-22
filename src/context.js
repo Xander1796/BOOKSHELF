@@ -1,49 +1,115 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
+
+import { reducer } from "./reducer";
+
+const initialState = {
+  bestSelledBooks: [],
+  isFetchingBestSelled: true,
+
+  popupProperties: {
+    isPopupVisible: false,
+    link: "",
+    message: "",
+    type: "",
+  },
+};
 
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [searchQuery, setSearchQuery] = useState("");
   const searchInput = useRef();
 
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [popupProperties, setPopupProperties] = useState({
-    message: "",
-    type: ""
-  });
+  const showPopup = (payload) => {
+    dispatch({ type: "SHOW_POPUP", payload: payload });
+  };
+  const hidePopup = () => {
+    dispatch({ type: "HIDE_POPUP" });
+  };
+  const replacePopup = (payload) => {
+    dispatch({ type: "REPLACE_POPUP", payload: payload });
+  };
 
-  let localStorageBookshelf = localStorage.getItem("bookshelf");
+  let localStorageBookshelves = localStorage.getItem("bookshelves");
 
-  if (!localStorageBookshelf) {
+  if (!localStorageBookshelves) {
     localStorage.setItem(
-      "bookshelf",
-      JSON.stringify({
-        readingNow: [],
-        bookmarks: [],
-        finishedBooks: [],
-      })
+      "bookshelves",
+      JSON.stringify([
+        {
+          bookshelfName: "Reading now",
+          route: "/reading-now",
+          books: [],
+        },
+        {
+          bookshelfName: "Bookmarks",
+          route: "/bookmarks",
+          books: [],
+        },
+        {
+          bookshelfName: "Finished books",
+          route: "/finished-books",
+          books: [],
+        },
+      ])
     );
   }
 
-  const [bookshelf, setBookshelf] = useState(
-    JSON.parse(localStorage.getItem("bookshelf"))
+  const [bookshelves, setBookshelves] = useState(
+    JSON.parse(localStorage.getItem("bookshelves"))
   );
 
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
   console.log("render");
 
+  const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
+
+  useEffect(() => {
+    console.log(state.bestSelledBooks);
+
+    const getBestSelledBooks = async () => {
+      dispatch({ type: "FETCHING_BEST_SELLED" });
+      try {
+        const data = await fetch(
+          `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${nytKey}`
+        );
+        const response = await data.json();
+
+        console.log("BEST SELLED FETCHING", response);
+
+        dispatch({
+          type: "SET_BEST_SELLED",
+          payload: response.results.lists,
+        });
+        dispatch({ type: "STOP_FETCHING_BEST_SELLED" });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getBestSelledBooks();
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
+        ...state,
+        state,
+        showPopup,
+        hidePopup,
+        replacePopup,
         searchQuery,
         setSearchQuery,
         searchInput,
-        setIsPopupVisible,
-        isPopupVisible,
-        popupProperties,
-        setPopupProperties,
-        bookshelf,
-        setBookshelf,
+        bookshelves,
+        setBookshelves,
       }}
     >
       {children}

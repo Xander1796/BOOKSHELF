@@ -5,60 +5,64 @@ import BookshelfItem from "../components/BookshelfItem";
 import EmptyBookshelf from "../components/EmptyBookshelf";
 import { useLocation } from "react-router-dom";
 
+///LIBRARY FOR ANIMATING ON MOUNT AND UNMOUNT
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+////
+
 import { v4 as uniqueId } from "uuid";
 
 const Bookshelf = () => {
   const location = useLocation();
 
   let currentBookshelf;
-  let currentBookshelfName;
   let bookshelfMessage;
-  let bookshelfTitle;
 
-  const localStorageBookshelf = JSON.parse(localStorage.getItem("bookshelf"));
+  const localStorageBookshelves = JSON.parse(
+    localStorage.getItem("bookshelves")
+  );
+
+  currentBookshelf = localStorageBookshelves.find(
+    (bookshelf) => `/bookshelf${bookshelf.route}` === location.pathname
+  );
 
   if (location.pathname === "/bookshelf/reading-now") {
-    currentBookshelf = localStorageBookshelf.readingNow;
-    currentBookshelfName = "readingNow";
     bookshelfMessage = "Books that you are currently reading";
-    bookshelfTitle = "Reading now";
   }
   if (location.pathname === "/bookshelf/bookmarks") {
-    currentBookshelf = localStorageBookshelf.bookmarks;
-    currentBookshelfName = "bookmarks";
     bookshelfMessage = "Books that you want to read";
-    bookshelfTitle = "Bookmarks";
   }
   if (location.pathname === "/bookshelf/finished-books") {
-    currentBookshelf = localStorageBookshelf.finishedBooks;
-    currentBookshelfName = "finishedBooks";
     bookshelfMessage = "Books that you have finished";
-    bookshelfTitle = "Finished books";
   }
 
   return (
     <section className="bookshelf-section">
-      {currentBookshelf.length === 0 && (<EmptyBookshelf />)}
+      <TransitionGroup component={null}>
+        {currentBookshelf.books.length === 0 && (
+          <CSSTransition timeout={200} classNames="empty-bookshelf">
+            <EmptyBookshelf key={uniqueId()} />
+          </CSSTransition>
+        )}
+      </TransitionGroup>
 
-      {currentBookshelf.length > 0 && (
+      {currentBookshelf.books.length > 0 && (
         <>
           <article>
-            <h1>{bookshelfTitle}</h1>
+            <h1>{currentBookshelf.bookshelfName}</h1>
             <p>{bookshelfMessage}</p>
-            <ul className="book-list">
-              {currentBookshelf.map((book) => {
-                const id = uniqueId();
+            <TransitionGroup className="book-list">
+              {currentBookshelf.books.map((book) => {
                 return (
-                  <BookshelfItem
-                    {...book}
-                    currentBookshelf={currentBookshelf}
-                    currentBookshelfName={currentBookshelfName}
-                    bookshelfTitle={bookshelfTitle}
-                    key={id}
-                  />
+                  <CSSTransition key={book.volumeId} timeout={400} classNames="book-item">
+                    <BookshelfItem
+                      {...book}
+                      book={book}
+                      currentBookshelf={currentBookshelf}
+                    />
+                  </CSSTransition>
                 );
               })}
-            </ul>
+            </TransitionGroup>
           </article>
         </>
       )}
