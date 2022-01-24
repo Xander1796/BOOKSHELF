@@ -22,7 +22,7 @@ const BestSelledSection = () => {
             <article key={id}>
               <div className="best-selled-title-wrapper">
                 <h3>{el.display_name}</h3>
-                <Link to={`/top15/${el?.list_name_encoded}`} className="btn">
+                <Link to={`/top15/${el?.list_name_encoded}`}>
                   SEE MORE
                 </Link>
               </div>

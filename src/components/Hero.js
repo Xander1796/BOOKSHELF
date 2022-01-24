@@ -1,17 +1,26 @@
 import React, { useEffect, useState, useRef } from "react";
-import { BiRightArrowAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 
 import { useGlobalContext } from "../context";
 
-import noBookSvg from "../assets/svg/no-book.svg";
-import { BsBook } from "react-icons/bs";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { v4 as uniqueId } from "uuid";
+
+//ICONS AND IMAGES
+
+import noBookSvg from "../assets/svg/no-book-reading.svg";
+import { IoIosAddCircle } from "react-icons/io";
+import { BiRightArrowAlt } from "react-icons/bi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 
+///
+
 const Hero = () => {
+  let [currentlyReading, setCurrentlyReading] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
   const { showPopup, searchInput, bookshelves, setBookshelves } =
     useGlobalContext();
-
   const finishedBooksIndex = bookshelves.findIndex(
     (bookshelf) => bookshelf.bookshelfName === "Finished books"
   );
@@ -21,8 +30,9 @@ const Hero = () => {
   );
 
   useEffect(() => {
-   console.log("bookshelves changed")
-  }, [bookshelves])
+    console.log("bookshelves changed");
+    setCurrentlyReading(bookshelves[readingNowIndex].books);
+  }, [bookshelves]);
 
   const markBookAsFinished = () => {
     const isBookInFinishedList = bookshelves[finishedBooksIndex].books.some(
@@ -37,9 +47,9 @@ const Hero = () => {
 
     showPopup({
       isPopupVisible: true,
-      link: `bookshelf${bookshelves[readingNowIndex].route}`,
+      link: `bookshelf/finished-books`,
       bookName: bookshelves[readingNowIndex].books[0].title,
-      message: `has been added to Finished`,
+      message: `has been added to Finished books`,
       type: "ok",
     });
 
@@ -62,51 +72,103 @@ const Hero = () => {
       </div>
 
       <div className="current-reading-book-wrapper">
-        {bookshelves[readingNowIndex].books.length === 0 && (
-          <div>
-            <img
-              src={noBookSvg}
-              alt="You are not reading anything at the moment"
-              className="no-book-img"
-            ></img>
-            <h3>You are not reading anything at the moment</h3>
-            <button
-              href=""
-              className="btn regular-btn"
-              onClick={() => searchInput.current.focus()}
-            >
-              Find something to read
-              <BiRightArrowAlt />
-            </button>
-          </div>
-        )}
+        <span className="current-reading-banner">
+          Currently reading
+          {currentlyReading.length > 1 && (
+            <div className="change-current-book">
+              <button
+              className="change-current-book-btn"
+                onClick={() => setIsDropdownVisible(!isDropdownVisible)}
+                onBlur={() =>
+                  setTimeout(() => {
+                    setIsDropdownVisible(!isDropdownVisible);
+                  }, 100)
+                }
+              >
+                <IoIosAddCircle className={isDropdownVisible && "btn-active"} />
+              </button>
+              <ul className={isDropdownVisible ? "change-book-list-visible" : ""}>
+                {currentlyReading.map((book, i) => {
+                  if (i === 0) return;
+                  return (
+                    <li key={uniqueId()}>
+                      <button
+                        onClick={() => {
+                          const targetedBook = currentlyReading[i];
+                          currentlyReading.splice(i, 1);
+                          currentlyReading.unshift(targetedBook);
+                          console.log(currentlyReading);
 
-        {bookshelves[readingNowIndex].books.length > 0 && (
-          <div>
-            <Link
-              to={`/book/${bookshelves[readingNowIndex].books[0].volumeId}`}
+                          bookshelves[readingNowIndex].books = currentlyReading;
+                          setBookshelves(bookshelves);
+                          setCurrentlyReading(currentlyReading);
+                          localStorage.setItem(
+                            "bookshelves",
+                            JSON.stringify(bookshelves)
+                          );
+                        }}
+                      >
+                        {book.title}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        </span>
+
+        <div
+          className={
+            currentlyReading.length === 0
+              ? "current-reading-empty"
+              : "current-reading-empty-hide"
+          }
+        >
+          <img
+            src={noBookSvg}
+            alt="Nothing to read at the moment"
+            className="no-book-img"
+          ></img>
+          <h3>Nothing to read</h3>
+          <button
+            href=""
+            className="btn regular-btn"
+            onClick={() => searchInput.current.focus()}
+          >
+            Find something to read
+            <BiRightArrowAlt />
+          </button>
+        </div>
+
+        <TransitionGroup component={null}>
+          {currentlyReading.length > 0 && (
+            <CSSTransition
+              key={currentlyReading[0].volumeId}
+              timeout={500}
+              classNames="current-reading"
             >
-              <img
-                src={bookshelves[readingNowIndex].books[0].img}
-                alt={bookshelves[readingNowIndex].books[0].title}
-                className="reading-book-img"
-              />
-            </Link>
-            <h2>{bookshelves[readingNowIndex].books[0].title}</h2>
-            <p>{`By ${bookshelves[readingNowIndex].books[0].author}`}</p>
-            <button
-              className="btn hero-btn-finished"
-              onClick={markBookAsFinished}
-            >
-              Finished
-              <AiOutlineCheckCircle />
-            </button>
-            <span className="current-reading-banner">
-              <BsBook />
-              Currently reading
-            </span>
-          </div>
-        )}
+              <div>
+                <Link to={`/book/${currentlyReading[0].volumeId}`}>
+                  <img
+                    src={currentlyReading[0].img}
+                    alt={currentlyReading[0].title}
+                    className="reading-book-img"
+                  />
+                </Link>
+                <h2>{currentlyReading[0].title}</h2>
+                <p>{`By ${currentlyReading[0].author}`}</p>
+                <button
+                  className="btn hero-btn-finished"
+                  onClick={markBookAsFinished}
+                >
+                  Finished
+                  <AiOutlineCheckCircle />
+                </button>
+              </div>
+            </CSSTransition>
+          )}
+        </TransitionGroup>
       </div>
     </section>
   );

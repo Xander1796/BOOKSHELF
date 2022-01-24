@@ -17,10 +17,10 @@ const BestSelledItem = (book) => {
       <a
         onClick={async (e) => {
           e.preventDefault();
-          console.log(book);
+          console.log(book.primary_isbn10, book);
           try {
             const response = await fetch(
-              `https://www.googleapis.com/books/v1/volumes?q=${book.primary_isbn10}`
+              `https://www.googleapis.com/books/v1/volumes?q=isbn:${book.primary_isbn10}`
             );
             const data = await response.json();
             console.log(data);

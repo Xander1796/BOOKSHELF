@@ -27,7 +27,7 @@ const SearchResults = () => {
         );
         const data = await response.json();
         console.log(data);
-        setSearchResults(data.items);
+        setSearchResults(data?.items ? data.items : []);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -37,22 +37,34 @@ const SearchResults = () => {
     getSearchResults();
   }, [searchParams]);
 
+  console.log(searchResults);
+
   return (
     <>
       {isLoading && <LoadingSpinner />}
       {isLoading || (
         <section className="search-section">
-          <p className="search-section-title">
-            <AiOutlineSearch /> Search results for <span>{searchQuery}</span>
-          </p>
-          <article>
-            <ul className="search-list book-list">
-              {searchResults.map((book) => {
-                const id = uniqueId();
-                return <SearchBook {...book} key={id} />;
-              })}
-            </ul>
-          </article>
+          {searchResults.length > 0 && (
+            <>
+              <p className="search-section-title">
+                <AiOutlineSearch /> Search results for{" "}
+                <span>{searchQuery}</span>
+              </p>
+              <article>
+                <ul className="search-list book-list">
+                  {searchResults.map((book) => {
+                    const id = uniqueId();
+                    return <SearchBook {...book} key={id} />;
+                  })}
+                </ul>
+              </article>
+            </>
+          )}
+          {searchResults.length === 0 && (
+            <p className="search-section-title">
+              <AiOutlineSearch /> No search results
+            </p>
+          )}
         </section>
       )}
     </>

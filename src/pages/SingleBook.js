@@ -19,8 +19,7 @@ const SingleBook = () => {
 
   const { volumeId } = useParams();
 
-  const { showPopup, bookshelves, setBookshelves} =
-    useGlobalContext();
+  const { showPopup, bookshelves, setBookshelves } = useGlobalContext();
 
   useEffect(() => {
     async function getSingleBook() {
@@ -52,7 +51,7 @@ const SingleBook = () => {
           showPopup({
             isPopupVisible: true,
             link: `bookshelf${bookshelves[i].route}`,
-            message: `This book is already in ${typeOfBookshelf}`,
+            message: `This book is already in ${bookshelves[i].bookshelfName}`,
             type: "error",
           });
           return;

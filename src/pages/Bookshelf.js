@@ -37,6 +37,9 @@ const Bookshelf = () => {
 
   return (
     <section className="bookshelf-section">
+      <h1>{currentBookshelf.bookshelfName}</h1>
+      <p>{bookshelfMessage}</p>
+
       <TransitionGroup component={null}>
         {currentBookshelf.books.length === 0 && (
           <CSSTransition timeout={200} classNames="empty-bookshelf">
@@ -45,27 +48,25 @@ const Bookshelf = () => {
         )}
       </TransitionGroup>
 
-      {currentBookshelf.books.length > 0 && (
-        <>
-          <article>
-            <h1>{currentBookshelf.bookshelfName}</h1>
-            <p>{bookshelfMessage}</p>
-            <TransitionGroup className="book-list">
-              {currentBookshelf.books.map((book) => {
-                return (
-                  <CSSTransition key={book.volumeId} timeout={400} classNames="book-item">
-                    <BookshelfItem
-                      {...book}
-                      book={book}
-                      currentBookshelf={currentBookshelf}
-                    />
-                  </CSSTransition>
-                );
-              })}
-            </TransitionGroup>
-          </article>
-        </>
-      )}
+      <article>
+        <TransitionGroup className="book-list">
+          {currentBookshelf.books.length > 0 && currentBookshelf.books.map((book) => {
+            return (
+              <CSSTransition
+                key={book.volumeId}
+                timeout={400}
+                classNames="book-item"
+              >
+                <BookshelfItem
+                  {...book}
+                  book={book}
+                  currentBookshelf={currentBookshelf}
+                />
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
+      </article>
     </section>
   );
 };
