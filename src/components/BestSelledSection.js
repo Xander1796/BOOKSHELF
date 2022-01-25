@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import BestSelledItem from "./BestSelledItem";
 import { useGlobalContext } from "../context";
 
+//icons
+import { BiRightArrowAlt } from "react-icons/bi";
+
 //npm package for unique ids
 import { v4 as uniqueId } from "uuid";
 
@@ -24,6 +27,7 @@ const BestSelledSection = () => {
                 <h3>{el.display_name}</h3>
                 <Link to={`/top15/${el?.list_name_encoded}`}>
                   SEE MORE
+                  <BiRightArrowAlt />
                 </Link>
               </div>
               <ul className="book-list">

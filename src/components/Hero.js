@@ -8,10 +8,9 @@ import { v4 as uniqueId } from "uuid";
 
 //ICONS AND IMAGES
 
-import noBookSvg from "../assets/svg/no-book-reading.svg";
 import { IoIosAddCircle } from "react-icons/io";
 import { BiRightArrowAlt } from "react-icons/bi";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineSearch } from "react-icons/ai";
 
 ///
 
@@ -72,12 +71,29 @@ const Hero = () => {
       </div>
 
       <div className="current-reading-book-wrapper">
-        <span className="current-reading-banner">
-          Currently reading
+        <div className="current-reading-img-wrapper">
+          <TransitionGroup component={null}>
+            {currentlyReading.length > 0 && (
+              <CSSTransition
+                key={currentlyReading[0].volumeId}
+                timeout={500}
+                classNames="current-reading-img"
+              >
+                <Link to={`/book/${currentlyReading[0].volumeId}`}>
+                  <img
+                    src={currentlyReading[0].img}
+                    alt={currentlyReading[0].title}
+                    className="reading-book-img"
+                  />
+                </Link>
+              </CSSTransition>
+            )}
+          </TransitionGroup>
+
           {currentlyReading.length > 1 && (
             <div className="change-current-book">
               <button
-              className="change-current-book-btn"
+                className="change-current-book-btn"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
                 onBlur={() =>
                   setTimeout(() => {
@@ -87,7 +103,9 @@ const Hero = () => {
               >
                 <IoIosAddCircle className={isDropdownVisible && "btn-active"} />
               </button>
-              <ul className={isDropdownVisible ? "change-book-list-visible" : ""}>
+              <ul
+                className={isDropdownVisible ? "change-book-list-visible" : ""}
+              >
                 {currentlyReading.map((book, i) => {
                   if (i === 0) return;
                   return (
@@ -116,32 +134,49 @@ const Hero = () => {
               </ul>
             </div>
           )}
-        </span>
-
-        <div
-          className={
-            currentlyReading.length === 0
-              ? "current-reading-empty"
-              : "current-reading-empty-hide"
-          }
-        >
-          <img
-            src={noBookSvg}
-            alt="Nothing to read at the moment"
-            className="no-book-img"
-          ></img>
-          <h3>Nothing to read</h3>
-          <button
-            href=""
-            className="btn regular-btn"
-            onClick={() => searchInput.current.focus()}
-          >
-            Find something to read
-            <BiRightArrowAlt />
-          </button>
         </div>
 
-        <TransitionGroup component={null}>
+        <div className="current-reading-delimitator"></div>
+
+        <div className="current-reading-book-details">
+          <TransitionGroup component={null}>
+            {currentlyReading.length > 0 && (
+              <CSSTransition
+                key={currentlyReading[0].volumeId}
+                timeout={500}
+                classNames="current-reading-details"
+              >
+                <div>
+                  <h2>{currentlyReading[0].title}</h2>
+                  <p>{`By ${currentlyReading[0].author}`}</p>
+                  <button
+                    className="btn hero-btn-finished"
+                    onClick={markBookAsFinished}
+                  >
+                    Finished
+                    <AiOutlineCheckCircle />
+                  </button>
+                </div>
+              </CSSTransition>
+            )}
+          </TransitionGroup>
+
+          {currentlyReading.length === 0 && (
+            <div className="current-reading-empty">
+              <h2>Nothing to read</h2>
+              <button
+                href=""
+                className="btn regular-btn"
+                onClick={() => searchInput.current.focus()}
+              >
+                Find something to read
+                <AiOutlineSearch />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* <TransitionGroup component={null}>
           {currentlyReading.length > 0 && (
             <CSSTransition
               key={currentlyReading[0].volumeId}
@@ -168,7 +203,7 @@ const Hero = () => {
               </div>
             </CSSTransition>
           )}
-        </TransitionGroup>
+        </TransitionGroup> */}
       </div>
     </section>
   );
