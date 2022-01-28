@@ -7,9 +7,10 @@ import { useGlobalContext } from "../context";
 import noImage from "../assets/svg/no-image.png";
 
 //icons
-import { BsBook, BsBookmark, BsPatchCheck } from "react-icons/bs";
+import { BsBook, BsBookmark } from "react-icons/bs";
+import { IoCheckmarkDone } from "react-icons/io5";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { AiFillStar, AiOutlineCheckCircle } from "react-icons/ai";
+import { AiFillStar } from "react-icons/ai";
 
 const SingleBook = () => {
   const [readMore, setReadMore] = useState(false);
@@ -25,12 +26,10 @@ const SingleBook = () => {
     async function getSingleBook() {
       try {
         setIsLoading(true);
-        console.log(volumeId);
         const data = await fetch(
           `https://www.googleapis.com/books/v1/volumes/${volumeId}`
         );
         const response = await data.json();
-        console.log(response);
         setSingleBook(response);
 
         setIsLoading(false);
@@ -114,46 +113,46 @@ const SingleBook = () => {
                 </a>
               )}
             </div>
-            <div className="single-book-cta-wrapper">
+            <div className="single-book-title-author">
               <h2>{volumeInfo?.title ? volumeInfo.title : "No title"}</h2>
               <p>{`By ${
                 volumeInfo?.authors?.[0]
                   ? volumeInfo.authors[0]
                   : "Unknown author"
               }`}</p>
-              <div>
-                <button
-                  className="btn regular-btn"
-                  onClick={() => {
-                    setBook("Reading now", "/reading-now", "Reading now");
-                  }}
-                >
-                  <BsBook />
-                  Reading Now
-                </button>
-                <button
-                  className="btn regular-btn"
-                  onClick={() => {
-                    setBook("Bookmarks", "/bookmarks", "Bookmarks");
-                  }}
-                >
-                  <BsBookmark />
-                  Bookmark
-                </button>
-                <button
-                  className="btn regular-btn"
-                  onClick={() => {
-                    setBook(
-                      "Finished books",
-                      "/finished-books",
-                      "Finished books"
-                    );
-                  }}
-                >
-                  <AiOutlineCheckCircle />
-                  Finished
-                </button>
-              </div>
+            </div>
+            <div className="single-book-cta-wrapper">
+              <button
+                className="btn regular-btn"
+                onClick={() => {
+                  setBook("Reading now", "/reading-now", "Reading now");
+                }}
+              >
+                <BsBook />
+                Reading Now
+              </button>
+              <button
+                className="btn regular-btn"
+                onClick={() => {
+                  setBook("Bookmarks", "/bookmarks", "Bookmarks");
+                }}
+              >
+                <BsBookmark />
+                Bookmark
+              </button>
+              <button
+                className="btn regular-btn"
+                onClick={() => {
+                  setBook(
+                    "Finished books",
+                    "/finished-books",
+                    "Finished books"
+                  );
+                }}
+              >
+                <IoCheckmarkDone />
+                Finished
+              </button>
             </div>
           </div>
 

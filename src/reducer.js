@@ -15,11 +15,9 @@ export const reducer = (state, action) => {
   }
 
   if (action.type === "SHOW_POPUP") {
-    console.log(action.payload);
     return { ...state, popupProperties: { ...action.payload } };
   }
   if (action.type === "HIDE_POPUP") {
-    console.log(action.payload);
     return {
       ...state,
       popupProperties: { ...state.popupProperties, isPopupVisible: false },

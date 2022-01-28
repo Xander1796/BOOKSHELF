@@ -67,13 +67,10 @@ const AppProvider = ({ children }) => {
   );
 
   const googleKey = "AIzaSyDuCQ1PmREdrQQsquhR2aiTnmGizfMDtrI";
-  console.log("render");
 
   const nytKey = "tuvnlDJQRdyYvL03iMG9UYrp51BGXnmT";
 
   useEffect(() => {
-    console.log(state.bestSelledBooks);
-
     const getBestSelledBooks = async () => {
       dispatch({ type: "FETCHING_BEST_SELLED" });
       try {
@@ -81,8 +78,6 @@ const AppProvider = ({ children }) => {
           `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${nytKey}`
         );
         const response = await data.json();
-
-        console.log("BEST SELLED FETCHING", response);
 
         dispatch({
           type: "SET_BEST_SELLED",

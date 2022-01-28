@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 
 import { useGlobalContext } from "../context";
 
+import noBook from "../assets/svg/no-book-reading.svg";
+
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { v4 as uniqueId } from "uuid";
 
 //ICONS AND IMAGES
 
 import { IoIosAddCircle } from "react-icons/io";
-import { BiRightArrowAlt } from "react-icons/bi";
-import { AiOutlineCheckCircle, AiOutlineSearch } from "react-icons/ai";
+import { IoCheckmarkDone } from "react-icons/io5";
+import { BiDownArrowAlt } from "react-icons/bi";
+import { AiOutlineSearch } from "react-icons/ai";
 
 ///
 
@@ -29,7 +32,6 @@ const Hero = () => {
   );
 
   useEffect(() => {
-    console.log("bookshelves changed");
     setCurrentlyReading(bookshelves[readingNowIndex].books);
   }, [bookshelves]);
 
@@ -57,7 +59,6 @@ const Hero = () => {
     setBookshelves(bookshelves);
     localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
   };
-  console.log("rendering HERO SECTION");
 
   return (
     <section className="hero-section">
@@ -66,11 +67,18 @@ const Hero = () => {
         <p>Manage all your books in one place</p>
         <a href="#best-selled" className="hero-cta btn regular-btn">
           See The Best Selling Books
-          <BiRightArrowAlt />
+          <BiDownArrowAlt />
         </a>
       </div>
 
       <div className="current-reading-book-wrapper">
+        {currentlyReading.length === 0 && (
+          <img
+            src={noBook}
+            className="no-book-svg"
+            alt="Currently not reading any book"
+          ></img>
+        )}
         <div className="current-reading-img-wrapper">
           <TransitionGroup component={null}>
             {currentlyReading.length > 0 && (
@@ -91,15 +99,20 @@ const Hero = () => {
           </TransitionGroup>
 
           {currentlyReading.length > 1 && (
-            <div className="change-current-book">
+            <div
+              className="change-current-book"
+              onBlur={(e) => {
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                  setIsDropdownVisible(false);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setIsDropdownVisible(false);
+              }}
+            >
               <button
                 className="change-current-book-btn"
                 onClick={() => setIsDropdownVisible(!isDropdownVisible)}
-                onBlur={() =>
-                  setTimeout(() => {
-                    setIsDropdownVisible(!isDropdownVisible);
-                  }, 100)
-                }
               >
                 <IoIosAddCircle className={isDropdownVisible && "btn-active"} />
               </button>
@@ -115,7 +128,6 @@ const Hero = () => {
                           const targetedBook = currentlyReading[i];
                           currentlyReading.splice(i, 1);
                           currentlyReading.unshift(targetedBook);
-                          console.log(currentlyReading);
 
                           bookshelves[readingNowIndex].books = currentlyReading;
                           setBookshelves(bookshelves);
@@ -124,6 +136,7 @@ const Hero = () => {
                             "bookshelves",
                             JSON.stringify(bookshelves)
                           );
+                          setIsDropdownVisible(false);
                         }}
                       >
                         {book.title}
@@ -139,6 +152,7 @@ const Hero = () => {
         <div className="current-reading-delimitator"></div>
 
         <div className="current-reading-book-details">
+          <span>Currently reading</span>
           <TransitionGroup component={null}>
             {currentlyReading.length > 0 && (
               <CSSTransition
@@ -154,7 +168,7 @@ const Hero = () => {
                     onClick={markBookAsFinished}
                   >
                     Finished
-                    <AiOutlineCheckCircle />
+                    <IoCheckmarkDone />
                   </button>
                 </div>
               </CSSTransition>

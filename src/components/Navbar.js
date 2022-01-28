@@ -5,14 +5,15 @@ import BookshelfBtn from "./BookshelfBtn";
 import { bookshelfBtnData } from "../data";
 
 const Navbar = () => {
-  console.log(bookshelfBtnData);
   return (
     <nav>
-      <Link to="/" className="app-logo">
-        Bookshelf<span>.</span>
-      </Link>
-      <Search />
-      <BookshelfBtn />
+      <div className="nav-content">
+        <Link to="/" className="app-logo">
+          Bookshelf<span>.</span>
+        </Link>
+        <Search />
+        <BookshelfBtn />
+      </div>
     </nav>
   );
 };

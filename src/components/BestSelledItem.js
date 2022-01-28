@@ -15,15 +15,14 @@ const BestSelledItem = (book) => {
   return (
     <li className="book">
       <a
+      href="#"
         onClick={async (e) => {
           e.preventDefault();
-          console.log(book.primary_isbn10, book);
           try {
             const response = await fetch(
               `https://www.googleapis.com/books/v1/volumes?q=isbn:${book.primary_isbn10}`
             );
             const data = await response.json();
-            console.log(data);
             navigate(`/book/${data.items[0].id}`);
           } catch (error) {
             navigate("/error");

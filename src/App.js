@@ -13,12 +13,14 @@ import Popup from "./components/Popup";
 import FinishedBooksBookshelf from "./pages/FinishedBooksBookshelf";
 import BookmarksBookshelf from "./pages/BookmarksBookshelf";
 import ReadingNowBookshelf from "./pages/ReadingNowBookshelf";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
     <Router>
       <Navbar />
       <Popup />
+      <Footer />
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/top15/:listName" element={<Top15BestSelled />}></Route>

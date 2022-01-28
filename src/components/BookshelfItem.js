@@ -34,21 +34,28 @@ const BookshelfItem = (props) => {
       (item) => item.volumeId !== volumeId
     );
     bookshelves[indexOfCurrentBookshelf].books = newBooks;
-    
+
     setBookshelves(bookshelves);
     localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
   };
 
-  console.log('RENDERING BOOKSHELF ITEM')
   return (
     <li className="book">
-      <div className="move-book-wrapper">
+      <div
+        className="move-book-wrapper"
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget))
+            setIsDropdownVisible(false);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") setIsDropdownVisible(false);
+        }}
+      >
         <button
           className={`move-book-btn ${
             isDropdownVisible && "move-book-btn-active"
           }`}
           onClick={() => setIsDropdownVisible(!isDropdownVisible)}
-          onBlur={() => setIsDropdownVisible(false)}
         >
           Move to <IoIosArrowDown />
         </button>

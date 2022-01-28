@@ -26,7 +26,6 @@ const SearchResults = () => {
           )}&maxResults=20&printType=books`
         );
         const data = await response.json();
-        console.log(data);
         setSearchResults(data?.items ? data.items : []);
         setIsLoading(false);
       } catch (error) {
@@ -37,7 +36,6 @@ const SearchResults = () => {
     getSearchResults();
   }, [searchParams]);
 
-  console.log(searchResults);
 
   return (
     <>

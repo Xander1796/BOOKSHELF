@@ -6,13 +6,13 @@ import finished from "./assets/svg/book-finished.svg";
 export const bookshelfBtnData = [
   {
     title: "Reading now",
-    description: "Book/s that you are currently reading",
+    description: "Books that you are currently reading",
     src: readingNow,
     path: "/bookshelf/reading-now",
   },
   {
     title: "Bookmarks",
-    description: "The books that you have bookmarked for later readings",
+    description: "Books that you want to read",
     src: toRead,
     path: "/bookshelf/bookmarks",
   },
