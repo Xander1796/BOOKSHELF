@@ -23,7 +23,6 @@ const Top15BestSelled = () => {
         const response = await data.json();
         setTop15List(response);
         setIsLoading(false);
-        console.log(response);
       } catch (error) {
         console.log(error);
         navigate("/error");
