@@ -370,7 +370,7 @@ nav {
   border: none;
   outline: none;
   border-radius: 0.5rem;
-  flex: 1;
+  width: 100%;
   font-size: 1.8rem;
   color: var(--primary-color-700);
   padding: 0.5rem 1rem;
