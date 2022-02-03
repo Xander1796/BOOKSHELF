@@ -1378,6 +1378,18 @@ footer {
 
 /* MEDIA QUERIES */
 
+@media (min-width: 2000px) {
+  html {
+    font-size: 80%;
+  }
+
+  section,
+  .nav-content,
+  .footer-creator {
+    width: 1500px;
+  }
+}
+
 @media (max-width: 1200px) {
   body {
     padding-bottom: 5rem;
