@@ -41,7 +41,7 @@ const SingleBook = () => {
     getSingleBook();
   }, [volumeId]);
 
-  const { volumeInfo, saleInfo } = singleBook;
+  const { volumeInfo } = singleBook;
 
   const setBook = (typeOfBookshelf, route, name) => {
     for (let i = 0; i < bookshelves.length; i++) {
@@ -92,27 +92,20 @@ const SingleBook = () => {
       {isLoading && <LoadingSpinner />}
       {isLoading || (
         <section className="single-book">
-          <div className="single-book-actions">
-            <div className="img-wrapper">
-              <img
-                src={
-                  volumeInfo?.imageLinks?.thumbnail
-                    ? volumeInfo.imageLinks.thumbnail
-                    : noImage
-                }
-                alt=""
-              />
-              {saleInfo?.saleability === "FOR_SALE" && (
-                <a
-                  href={saleInfo?.buyLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn buy-book-btn"
-                >
-                  Buy this book
-                </a>
-              )}
-            </div>
+          <div className="img-wrapper">
+            <img
+              src={
+                volumeInfo?.imageLinks?.thumbnail
+                  ? volumeInfo.imageLinks.thumbnail
+                  : noImage
+              }
+              alt=""
+            />
+          </div>
+
+          <div className="single-book-delimitator"></div>
+
+          <div className="single-book-bottom-info">
             <div className="single-book-title-author">
               <h2>{volumeInfo?.title ? volumeInfo.title : "No title"}</h2>
               <p>{`By ${
@@ -121,6 +114,7 @@ const SingleBook = () => {
                   : "Unknown author"
               }`}</p>
             </div>
+
             <div className="single-book-cta-wrapper">
               <button
                 className="btn regular-btn"
@@ -154,70 +148,71 @@ const SingleBook = () => {
                 Finished
               </button>
             </div>
-          </div>
 
-          <div className="single-book-description-details">
-            <>
-              <div className="book-description-wrapper">
-                <div
-                  className="book-description"
-                  ref={descrHeight}
-                  dangerouslySetInnerHTML={{ __html: volumeInfo.description }}
-                ></div>
+            <div className="single-book-description-details">
+              <>
+                <div className="book-description-wrapper">
+                  <div
+                    className="book-description"
+                    ref={descrHeight}
+                    dangerouslySetInnerHTML={{ __html: volumeInfo.description }}
+                  ></div>
 
-                {readMore || (
-                  <div className="book-description-bottom-gradient"></div>
-                )}
-              </div>
+                  {readMore || (
+                    <div className="book-description-bottom-gradient"></div>
+                  )}
+                </div>
 
-              <button
-                className="read-more-btn btn regular-btn"
-                onClick={() => {
-                  setReadMore(!readMore);
-                  if (readMore)
-                    descrHeight.current.style.maxHeight = `${150}px`;
-                  if (readMore === false)
-                    descrHeight.current.style.maxHeight = `${descrHeight.current.scrollHeight}px`;
-                }}
-              >
-                {readMore ? "Show Less" : "Read More"}
-                {readMore ? <IoIosArrowUp /> : <IoIosArrowDown />}
-              </button>
-            </>
-          </div>
-          <div className="single-book-details">
-            {volumeInfo?.pageCount && (
-              <div>
-                <h3>Number of pages</h3>
-                <p>{volumeInfo.pageCount}</p>
-              </div>
-            )}
+                <button
+                  className="read-more-btn btn regular-btn"
+                  onClick={() => {
+                    setReadMore(!readMore);
+                    if (readMore)
+                      descrHeight.current.style.maxHeight = `${150}px`;
+                    if (readMore === false)
+                      descrHeight.current.style.maxHeight = `${descrHeight.current.scrollHeight}px`;
+                  }}
+                >
+                  {readMore ? "Show Less" : "Read More"}
+                  {readMore ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                </button>
+              </>
+            </div>
 
-            {volumeInfo?.publishedDate && (
-              <div>
-                <h3>First published</h3>
-                <p>{volumeInfo.publishedDate}</p>
-              </div>
-            )}
+            <div className="single-book-details">
+              {volumeInfo?.pageCount && (
+                <div>
+                  <h3>Number of pages</h3>
+                  <p>{volumeInfo.pageCount}</p>
+                </div>
+              )}
 
-            {volumeInfo?.categories?.[0] && (
-              <div>
-                <h3>Category</h3>
-                <p>{volumeInfo.categories[0]}</p>
-              </div>
-            )}
-            {volumeInfo?.averageRating && (
-              <div>
-                <h3>Average Rating</h3>
-                <p>
-                  <span>
-                    <AiFillStar />
-                    {volumeInfo.averageRating}
-                  </span>
-                  {`(${volumeInfo.ratingsCount} votes)`}
-                </p>
-              </div>
-            )}
+              {volumeInfo?.publishedDate && (
+                <div>
+                  <h3>First published</h3>
+                  <p>{volumeInfo.publishedDate}</p>
+                </div>
+              )}
+
+              {volumeInfo?.categories?.[0] && (
+                <div>
+                  <h3>Category</h3>
+                  <p>{volumeInfo.categories[0]}</p>
+                </div>
+              )}
+              {volumeInfo?.averageRating && (
+                <div>
+                  <h3>Average Rating</h3>
+                  <p>
+                    <span>
+                      <AiFillStar />
+                      {volumeInfo.averageRating}
+                    </span>
+                    {`(${volumeInfo.ratingsCount} votes)`}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import LoadingSpinner from "../components/LoadingSpinner";
-import BestSelledItem from "../components/BestSelledItem";
+import BookCard from "../components/BookCard";
 
 import { v4 as uniqueId } from "uuid";
 
@@ -43,9 +43,16 @@ const Top15BestSelled = () => {
 
           <article>
             <ul className="book-list">
-              {top15List.results.books.map((book) => {
+              {top15List.results.books.map((bookItem) => {
                 const id = uniqueId();
-                return <BestSelledItem {...book} key={id} />;
+                const book = {
+                  title: bookItem.title,
+                  img: bookItem.book_image,
+                  weeks_on_list: bookItem.weeks_on_list,
+                  author: bookItem.contributor,
+                  isbn: bookItem.primary_isbn10,
+                };
+                return <BookCard book={book} key={id} />;
               })}
             </ul>
           </article>

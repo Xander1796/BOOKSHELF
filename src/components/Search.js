@@ -9,6 +9,7 @@ const Search = () => {
 
   return (
     <form
+      autoComplete="off"
       className="search-wrapper"
       onSubmit={(e) => {
         e.preventDefault();
@@ -18,8 +19,12 @@ const Search = () => {
         }
       }}
     >
-      <input id="search" type="search" placeholder="Search for books" ref={searchInput} />
-      <div className="search-wrapper-border"></div>
+      <input
+        id="search"
+        type="search"
+        placeholder="Search for books"
+        ref={searchInput}
+      />
       <button className="search-button">Search</button>
     </form>
   );

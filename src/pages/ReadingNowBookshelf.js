@@ -1,8 +1,10 @@
 import React from "react";
 import Bookshelf from "./Bookshelf";
+import useScrollTop from "../custom-hooks/useScrollTop";
 
-const readingNowBookshelf = () => {
+const ReadingNowBookshelf = () => {
+  useScrollTop();
   return <Bookshelf />;
 };
 
-export default readingNowBookshelf;
+export default ReadingNowBookshelf;

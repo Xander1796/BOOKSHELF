@@ -8,7 +8,7 @@ import { useGlobalContext } from "../context";
 
 import { BiRightArrowAlt } from "react-icons/bi";
 
-const SearchBook = (book) => {
+const SearchBook = ({book}) => {
   const { title, authors, imageLinks } = book.volumeInfo;
   const volumeId = book.id;
   const { searchInput } = useGlobalContext();

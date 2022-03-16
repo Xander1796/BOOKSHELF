@@ -6,14 +6,11 @@ import { useGlobalContext } from "../context";
 //icons
 
 import { BiRightArrowAlt } from "react-icons/bi";
-import { IoIosArrowDown } from "react-icons/io";
 
 const BookshelfItem = (props) => {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
   const { searchInput, bookshelves, setBookshelves, showPopup } =
     useGlobalContext();
-  const { volumeId, img, title, author } = props;
+  const { volumeId, img, title, author, getIcon } = props;
 
   const location = useLocation();
 
@@ -41,30 +38,19 @@ const BookshelfItem = (props) => {
 
   return (
     <li className="book">
-      <div
-        className="move-book-wrapper"
-        onBlur={(e) => {
-          if (!e.currentTarget.contains(e.relatedTarget))
-            setIsDropdownVisible(false);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") setIsDropdownVisible(false);
-        }}
-      >
-        <button
-          className={`move-book-btn ${
-            isDropdownVisible && "move-book-btn-active"
-          }`}
-          onClick={() => setIsDropdownVisible(!isDropdownVisible)}
-        >
-          Move to <IoIosArrowDown />
-        </button>
+      <div className="top-card">
+        <img src={img} />
+        <div>
+          <h4>{title}</h4>
+          <p>{author}</p>
+        </div>
+      </div>
 
-        <ul
-          className={`move-book-options ${
-            isDropdownVisible && "move-book-drop-visible"
-          }`}
-        >
+      <div className="bottom-card">
+        <div className="actions">
+          <span>
+            Move to <BiRightArrowAlt />
+          </span>
           {bookshelves.map((bookshelf, i) => {
             if (
               bookshelf.bookshelfName === props.currentBookshelf.bookshelfName
@@ -89,41 +75,41 @@ const BookshelfItem = (props) => {
                   });
                 }}
               >
-                {bookshelf.bookshelfName} <BiRightArrowAlt />
+                {getIcon(bookshelf.bookshelfName)}
+                {bookshelf.bookshelfName}
               </Link>
             );
           })}
-        </ul>
-      </div>
-
-      <Link
-        to={`/book/${volumeId}`}
-        onClick={() => (searchInput.current.value = "")}
-      >
-        <img src={img} alt={`${title}`} />
-        <div>
-          <h4>{title}</h4>
-          <p>{author}</p>
         </div>
-        <BiRightArrowAlt className="card-icon-right-arr" />
-      </Link>
 
-      <button
-        className="remove-book-btn"
-        onClick={() => {
-          removeBook();
+        <div className="details-and-remove">
+          <Link
+            to={location}
+            className="remove"
+            onClick={() => {
+              removeBook();
 
-          showPopup({
-            isPopupVisible: true,
-            link: "",
-            bookName: title,
-            message: `has been removed`,
-            type: "ok",
-          });
-        }}
-      >
-        <Link to={location}>Remove</Link>
-      </button>
+              showPopup({
+                isPopupVisible: true,
+                link: "",
+                bookName: title,
+                message: `has been removed`,
+                type: "ok",
+              });
+            }}
+          >
+            Remove
+          </Link>
+
+          <Link
+            className="details"
+            to={`/book/${volumeId}`}
+            onClick={() => (searchInput.current.value = "")}
+          >
+            See details
+          </Link>
+        </div>
+      </div>
     </li>
   );
 };

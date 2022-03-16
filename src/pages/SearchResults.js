@@ -8,6 +8,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 import { v4 as uniqueId } from "uuid";
 
+import BookCard from "../components/BookCard";
+
 const SearchResults = () => {
   let { searchQuery, setSearchQuery } = useGlobalContext();
   const [searchResults, setSearchResults] = useState([]);
@@ -50,9 +52,15 @@ const SearchResults = () => {
               </p>
               <article>
                 <ul className="search-list book-list">
-                  {searchResults.map((book) => {
+                  {searchResults.map((bookItem) => {
                     const id = uniqueId();
-                    return <SearchBook {...book} key={id} />;
+                    const book = {
+                      title: bookItem?.volumeInfo?.title,
+                      author: bookItem?.volumeInfo?.authors?.[0],
+                      img: bookItem?.volumeInfo?.imageLinks?.thumbnail,
+                      volumeId: bookItem.id
+                    };
+                    return <BookCard book={book} key={id} />;
                   })}
                 </ul>
               </article>

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { useGlobalContext } from "../context";
 import BookshelfItem from "../components/BookshelfItem";
 import EmptyBookshelf from "../components/EmptyBookshelf";
 import { useLocation } from "react-router-dom";
@@ -11,11 +10,14 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import { v4 as uniqueId } from "uuid";
 
+//icons
+import { BsBook, BsBookmark } from "react-icons/bs";
+import { IoCheckmarkDone } from "react-icons/io5";
+
 const Bookshelf = () => {
   const location = useLocation();
 
   let currentBookshelf;
-  let bookshelfMessage;
 
   const localStorageBookshelves = JSON.parse(
     localStorage.getItem("bookshelves")
@@ -25,20 +27,18 @@ const Bookshelf = () => {
     (bookshelf) => `/bookshelf${bookshelf.route}` === location.pathname
   );
 
-  if (location.pathname === "/bookshelf/reading-now") {
-    bookshelfMessage = "Books that you are currently reading";
-  }
-  if (location.pathname === "/bookshelf/bookmarks") {
-    bookshelfMessage = "Books that you want to read";
-  }
-  if (location.pathname === "/bookshelf/finished-books") {
-    bookshelfMessage = "Books that you have finished";
-  }
+  const getIcon = (bookshelfName) => {
+    if (bookshelfName === "Reading now") return <BsBook />;
+    if (bookshelfName === "Bookmarks") return <BsBookmark />;
+    if (bookshelfName === "Finished books") return <IoCheckmarkDone />;
+  };
 
   return (
     <section className="bookshelf-section">
-      <h1>{currentBookshelf.bookshelfName}</h1>
-      <p>{bookshelfMessage}</p>
+      <h1>
+        {getIcon(currentBookshelf.bookshelfName)}
+        {currentBookshelf.bookshelfName}
+      </h1>
 
       <TransitionGroup component={null}>
         {currentBookshelf.books.length === 0 && (
@@ -50,21 +50,23 @@ const Bookshelf = () => {
 
       <article>
         <TransitionGroup className="book-list">
-          {currentBookshelf.books.length > 0 && currentBookshelf.books.map((book) => {
-            return (
-              <CSSTransition
-                key={book.volumeId}
-                timeout={400}
-                classNames="book-item"
-              >
-                <BookshelfItem
-                  {...book}
-                  book={book}
-                  currentBookshelf={currentBookshelf}
-                />
-              </CSSTransition>
-            );
-          })}
+          {currentBookshelf.books.length > 0 &&
+            currentBookshelf.books.map((book) => {
+              return (
+                <CSSTransition
+                  key={book.volumeId}
+                  timeout={400}
+                  classNames="book-item"
+                >
+                  <BookshelfItem
+                    {...book}
+                    book={book}
+                    currentBookshelf={currentBookshelf}
+                    getIcon={getIcon}
+                  />
+                </CSSTransition>
+              );
+            })}
         </TransitionGroup>
       </article>
     </section>
