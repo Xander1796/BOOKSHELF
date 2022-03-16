@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 import BookCard from "../components/BookCard";
+import useScrollTop from "../custom-hooks/useScrollTop";
 
 import { v4 as uniqueId } from "uuid";
 
@@ -13,6 +14,8 @@ const Top15BestSelled = () => {
   const { listName } = useParams();
   const navigate = useNavigate();
 
+  useScrollTop();
+
   useEffect(() => {
     setIsLoading(true);
     const getTop15List = async () => {
@@ -22,7 +25,9 @@ const Top15BestSelled = () => {
         );
         const response = await data.json();
         setTop15List(response);
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
       } catch (error) {
         console.log(error);
         navigate("/error");
@@ -34,12 +39,16 @@ const Top15BestSelled = () => {
   }, []);
 
   return (
-    <>
-      {isLoading && <LoadingSpinner />}
+    <section className="top-15-section">
+      {isLoading && <LoadingSkeleton />}
       {isLoading || (
-        <section className="top-15-section">
-          <h1>{top15List?.results?.list_name ? top15List.results.list_name : ""}</h1>
-          <h3>{top15List?.num_results ? `TOP ${top15List.num_results}` : ''}</h3>
+        <>
+          <h1>
+            {top15List?.results?.list_name ? top15List.results.list_name : ""}
+          </h1>
+          <h3>
+            {top15List?.num_results ? `TOP ${top15List.num_results}` : ""}
+          </h3>
 
           <article>
             <ul className="book-list">
@@ -56,9 +65,9 @@ const Top15BestSelled = () => {
               })}
             </ul>
           </article>
-        </section>
+        </>
       )}
-    </>
+    </section>
   );
 };
 

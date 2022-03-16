@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
-import LoadingSpinner from "../components/LoadingSpinner";
-import SearchBook from "../components/SearchBook";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 import { AiOutlineSearch } from "react-icons/ai";
+import useScrollTop from "../custom-hooks/useScrollTop";
 
 import { v4 as uniqueId } from "uuid";
 
@@ -15,6 +15,8 @@ const SearchResults = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  useScrollTop();
 
   useEffect(() => {
     const getSearchResults = async () => {
@@ -29,7 +31,9 @@ const SearchResults = () => {
         );
         const data = await response.json();
         setSearchResults(data?.items ? data.items : []);
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 300);
       } catch (error) {
         console.log(error);
       }
@@ -38,12 +42,12 @@ const SearchResults = () => {
     getSearchResults();
   }, [searchParams]);
 
-
   return (
-    <>
-      {isLoading && <LoadingSpinner />}
+    <section className="search-section">
+      {isLoading && <LoadingSkeleton />}
+
       {isLoading || (
-        <section className="search-section">
+        <>
           {searchResults.length > 0 && (
             <>
               <p className="search-section-title">
@@ -58,7 +62,7 @@ const SearchResults = () => {
                       title: bookItem?.volumeInfo?.title,
                       author: bookItem?.volumeInfo?.authors?.[0],
                       img: bookItem?.volumeInfo?.imageLinks?.thumbnail,
-                      volumeId: bookItem.id
+                      volumeId: bookItem.id,
                     };
                     return <BookCard book={book} key={id} />;
                   })}
@@ -71,9 +75,9 @@ const SearchResults = () => {
               <AiOutlineSearch /> No search results
             </p>
           )}
-        </section>
+        </>
       )}
-    </>
+    </section>
   );
 };
 
