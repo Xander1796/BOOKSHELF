@@ -23,7 +23,7 @@ const Popup = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         hidePopup();
-      }, 700000);
+      }, 7000);
     }
   }, [popupProperties]);
 
