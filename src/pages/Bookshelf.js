@@ -42,7 +42,7 @@ const Bookshelf = () => {
 
       <TransitionGroup component={null}>
         {currentBookshelf.books.length === 0 && (
-          <CSSTransition timeout={200} classNames="empty-bookshelf">
+          <CSSTransition timeout={250} classNames="empty-bookshelf">
             <EmptyBookshelf key={uniqueId()} />
           </CSSTransition>
         )}
@@ -51,14 +51,20 @@ const Bookshelf = () => {
       <article>
         <TransitionGroup className="book-list">
           {currentBookshelf.books.length > 0 &&
-            currentBookshelf.books.map((book) => {
+            currentBookshelf.books.map((book, i) => {
               return (
                 <CSSTransition
+                  in
+                  appear={true}
                   key={book.volumeId}
-                  timeout={400}
+                  timeout={{
+                    appear: 300 + i * 100,
+                    exit: 700,
+                  }}
                   classNames="book-item"
                 >
                   <BookshelfItem
+                    transitionDelay={`${i * 0.1}s`}
                     {...book}
                     book={book}
                     currentBookshelf={currentBookshelf}

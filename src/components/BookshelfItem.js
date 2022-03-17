@@ -37,7 +37,7 @@ const BookshelfItem = (props) => {
   };
 
   return (
-    <li className="book">
+    <li className="book" style={{transitionDelay: props.transitionDelay}}>
       <div className="top-card">
         <img src={img} />
         <div>

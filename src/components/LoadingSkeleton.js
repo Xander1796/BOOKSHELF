@@ -5,10 +5,10 @@ const LoadingSkeletonItem = () => {
         <span className="img skeleton-anim"></span>
         <div>
           <span className="weeks-on-list skeleton-anim">
-            Lorem, ipsum dolor.
+            Lorem, ipsum
           </span>
           <h4 className="skeleton-anim">Lorem ipsum dolor sit.</h4>
-          <p className="skeleton-anim">Lorem, ipsum.</p>
+          <p className="skeleton-anim">Lorem, ipsum dolor</p>
         </div>
       </div>
       <div className="bottom-card">

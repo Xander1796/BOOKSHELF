@@ -10,6 +10,9 @@ import { v4 as uniqueId } from "uuid";
 
 import BookCard from "../components/BookCard";
 
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { Transition } from "react-transition-group";
+
 const SearchResults = () => {
   let { searchQuery, setSearchQuery } = useGlobalContext();
   const [searchResults, setSearchResults] = useState([]);
@@ -33,7 +36,7 @@ const SearchResults = () => {
         setSearchResults(data?.items ? data.items : []);
         setTimeout(() => {
           setIsLoading(false);
-        }, 300);
+        }, 400);
       } catch (error) {
         console.log(error);
       }
@@ -56,16 +59,32 @@ const SearchResults = () => {
               </p>
               <article>
                 <ul className="search-list book-list">
-                  {searchResults.map((bookItem) => {
-                    const id = uniqueId();
-                    const book = {
-                      title: bookItem?.volumeInfo?.title,
-                      author: bookItem?.volumeInfo?.authors?.[0],
-                      img: bookItem?.volumeInfo?.imageLinks?.thumbnail,
-                      volumeId: bookItem.id,
-                    };
-                    return <BookCard book={book} key={id} />;
-                  })}
+                  <TransitionGroup component={null}>
+                    {searchResults.map((bookItem, i) => {
+                      const id = uniqueId();
+                      const book = {
+                        title: bookItem?.volumeInfo?.title,
+                        author: bookItem?.volumeInfo?.authors?.[0],
+                        img: bookItem?.volumeInfo?.imageLinks?.thumbnail,
+                        volumeId: bookItem.id,
+                      };
+                      return (
+                        <CSSTransition
+                          in
+                          appear={true}
+                          key={book.volumeId}
+                          timeout={300 + i * 100}
+                          classNames="book-item"
+                        >
+                          <BookCard
+                            transitionDelay={`${i * 0.1}s`}
+                            book={book}
+                            key={id}
+                          />
+                        </CSSTransition>
+                      );
+                    })}
+                  </TransitionGroup>
                 </ul>
               </article>
             </>

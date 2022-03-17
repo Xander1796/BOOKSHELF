@@ -6,6 +6,7 @@ import BookCard from "../components/BookCard";
 import useScrollTop from "../custom-hooks/useScrollTop";
 
 import { v4 as uniqueId } from "uuid";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 const Top15BestSelled = () => {
   const [top15List, setTop15List] = useState({});
@@ -27,7 +28,7 @@ const Top15BestSelled = () => {
         setTop15List(response);
         setTimeout(() => {
           setIsLoading(false);
-        }, 300);
+        }, 400);
       } catch (error) {
         console.log(error);
         navigate("/error");
@@ -52,17 +53,33 @@ const Top15BestSelled = () => {
 
           <article>
             <ul className="book-list">
-              {top15List.results.books.map((bookItem) => {
-                const id = uniqueId();
-                const book = {
-                  title: bookItem.title,
-                  img: bookItem.book_image,
-                  weeks_on_list: bookItem.weeks_on_list,
-                  author: bookItem.contributor,
-                  isbn: bookItem.primary_isbn10,
-                };
-                return <BookCard book={book} key={id} />;
-              })}
+              <TransitionGroup component={null}>
+                {top15List.results.books.map((bookItem, i) => {
+                  const id = uniqueId();
+                  const book = {
+                    title: bookItem.title,
+                    img: bookItem.book_image,
+                    weeks_on_list: bookItem.weeks_on_list,
+                    author: bookItem.contributor,
+                    isbn: bookItem.primary_isbn10,
+                  };
+                  return (
+                    <CSSTransition
+                      in
+                      appear={true}
+                      key={uniqueId()}
+                      timeout={300 + i * 100}
+                      classNames="book-item"
+                    >
+                      <BookCard
+                        book={book}
+                        key={id}
+                        transitionDelay={`${i * 0.1}s`}
+                      />
+                    </CSSTransition>
+                  );
+                })}
+              </TransitionGroup>
             </ul>
           </article>
         </>

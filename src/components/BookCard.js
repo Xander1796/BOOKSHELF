@@ -100,7 +100,7 @@ const BookshelfBtn = ({ btn, isbn, isLoading, setIsLoading, bookId }) => {
   );
 };
 
-const BookCard = ({ book }) => {
+const BookCard = ({ book, transitionDelay }) => {
   const { title, img, weeks_on_list, author, isbn, volumeId } = book;
   const { searchInput } = useGlobalContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -142,7 +142,7 @@ const BookCard = ({ book }) => {
   ];
 
   return (
-    <li className="book">
+    <li className="book" style={{transitionDelay: transitionDelay}}>
       <div className="top-card">
         <img src={img || noImage} alt={`Image for ${title}`} />
         <div>
