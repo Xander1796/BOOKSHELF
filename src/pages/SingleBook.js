@@ -4,6 +4,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { useParams } from "react-router-dom";
 import { useGlobalContext } from "../context";
 
+import { v4 as uniqueId } from "uuid";
+
 import noImage from "../assets/svg/no-image.png";
 
 //icons
@@ -48,9 +50,10 @@ const SingleBook = () => {
       for (let j = 0; j < bookshelves[i].books.length; j++) {
         if (bookshelves[i].books[j].volumeId === volumeId) {
           showPopup({
-            isPopupVisible: true,
+            id: uniqueId(),
             link: `bookshelf${bookshelves[i].route}`,
-            message: `This book is already in ${bookshelves[i].bookshelfName}`,
+            bookName: volumeInfo?.title.slice(0, 35),
+            message: `is already in ${bookshelves[i].bookshelfName}`,
             type: "error",
           });
           return;
@@ -59,11 +62,11 @@ const SingleBook = () => {
     }
 
     showPopup({
-      isPopupVisible: true,
+      id: uniqueId(),
       link: `/bookshelf${route}`,
       bookName: volumeInfo?.title.slice(0, 35),
       message: `has been added to ${typeOfBookshelf}`,
-      type: "ok",
+      type: "done",
     });
 
     const book = {

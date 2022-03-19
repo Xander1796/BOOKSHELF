@@ -3,77 +3,72 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { BsCheckCircleFill } from "react-icons/bs";
-import { BiError, BiRightArrowAlt } from "react-icons/bi";
-import { IoClose } from "react-icons/io5";
+import { BiError } from "react-icons/bi";
+import { IoClose, IoTrashBin } from "react-icons/io5";
 import { useGlobalContext } from "../context";
 
 ///LIBRARY FOR ANIMATING ON MOUNT AND UNMOUNT
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 ////
 
-import { v4 as uniqueId } from "uuid";
-
-let timeout = undefined;
-
 const Popup = () => {
-  const { hidePopup, popupProperties, state } = useGlobalContext();
+  const { hidePopup, popupProperties, setTimeoutActive } = useGlobalContext();
 
-  useEffect(() => {
-    if (popupProperties.isPopupVisible) {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        hidePopup();
-      }, 7000);
+  const setIcon = (popupItem) => {
+    if (popupItem.type === "remove") {
+      return <IoTrashBin className="popup-info-icon" />;
     }
-  }, [popupProperties]);
-
-  const id = uniqueId();
+    if (popupItem.type === "done") {
+      return <BsCheckCircleFill className="popup-info-icon" />;
+    }
+    if (popupItem.type === "error") {
+      return <BiError className="popup-info-icon" />;
+    }
+  };
 
   return (
-    <>
+    <div className="popup-wrapper">
       <TransitionGroup component={null}>
-        {popupProperties.isPopupVisible && (
-          <CSSTransition timeout={500} classNames="popup">
-            <div
-              key={id}
-              className={`popup ${
-                popupProperties.type === "ok"
-                  ? "popup-book-added"
-                  : "popup-book-error"
-              }`}
-            >
-              <div className="popup-message">
-                {popupProperties.type === "ok" ? (
-                  <BsCheckCircleFill className="popup-info-icon" />
-                ) : (
-                  <BiError className="popup-info-icon" />
-                )}
-                <h3>
-                  {popupProperties.bookName}{" "}
-                  <span>{popupProperties.message}</span>
-                </h3>
-              </div>
+        {popupProperties.map((popupItem) => {
+          if (!popupItem?.isTimeoutActive) {
+            setTimeoutActive();
 
-              {popupProperties.link.length > 0 && (
-                <Link to={popupProperties.link} onClick={() => hidePopup()}>
-                  Go there
-                </Link>
-              )}
-              <button
-                className="popup-close-btn"
-                onClick={() => {
-                  hidePopup();
-                  clearTimeout(timeout);
-                  timeout = undefined;
-                }}
-              >
-                <IoClose />
-              </button>
-            </div>
-          </CSSTransition>
-        )}
+            setTimeout(() => {
+              hidePopup(popupItem.id);
+            }, 5000);
+          }
+          return (
+            <CSSTransition key={popupItem.id} timeout={500} classNames="popup">
+              <div className={`popup ${popupItem.type}`}>
+                <div className="popup-message">
+                  {setIcon(popupItem)}
+                  <h3>
+                    {popupItem.bookName} <span>{popupItem.message}</span>
+                  </h3>
+                </div>
+
+                {popupItem.link.length > 0 && (
+                  <Link
+                    to={popupItem.link}
+                    onClick={() => hidePopup(popupItem.id)}
+                  >
+                    Go there
+                  </Link>
+                )}
+                <button
+                  className="popup-close-btn"
+                  onClick={() => {
+                    hidePopup(popupItem.id);
+                  }}
+                >
+                  <IoClose />
+                </button>
+              </div>
+            </CSSTransition>
+          );
+        })}
       </TransitionGroup>
-    </>
+    </div>
   );
 };
 

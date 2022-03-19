@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { v4 as uniqueId } from "uuid";
 
 import noImage from "../assets/svg/no-image.png";
 
@@ -21,9 +22,12 @@ const BookshelfBtn = ({ btn, isbn, isLoading, setIsLoading, bookId }) => {
       for (let j = 0; j < bookshelves[i].books.length; j++) {
         if (bookshelves[i].books[j].volumeId === volumeId) {
           showPopup({
-            isPopupVisible: true,
+            id: uniqueId(),
             link: `bookshelf${bookshelves[i].route}`,
-            message: `This book is already in ${bookshelves[i].bookshelfName}`,
+            bookName: volumeInfo?.title
+              ? volumeInfo?.title.slice(0, 35)
+              : "Book",
+            message: `is already in ${bookshelves[i].bookshelfName}`,
             type: "error",
           });
           return;
@@ -52,11 +56,11 @@ const BookshelfBtn = ({ btn, isbn, isLoading, setIsLoading, bookId }) => {
     localStorage.setItem("bookshelves", JSON.stringify(bookshelves));
 
     showPopup({
-      isPopupVisible: true,
+      id: uniqueId(),
       link: `/bookshelf${route}`,
-      bookName: volumeInfo?.title.slice(0, 35),
+      bookName: volumeInfo?.title ? volumeInfo?.title.slice(0, 35) : "Book",
       message: `has been added to ${typeOfBookshelf}`,
-      type: "ok",
+      type: "done",
     });
   };
 
@@ -142,7 +146,7 @@ const BookCard = ({ book, transitionDelay }) => {
   ];
 
   return (
-    <li className="book" style={{transitionDelay: transitionDelay}}>
+    <li className="book" style={{ transitionDelay: transitionDelay }}>
       <div className="top-card">
         <img src={img || noImage} alt={`Image for ${title}`} />
         <div>

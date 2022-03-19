@@ -12,12 +12,7 @@ const initialState = {
   bestSelledBooks: [],
   isFetchingBestSelled: true,
 
-  popupProperties: {
-    isPopupVisible: false,
-    link: "",
-    message: "",
-    type: "",
-  },
+  popupProperties: [],
 };
 
 const AppContext = React.createContext();
@@ -30,11 +25,14 @@ const AppProvider = ({ children }) => {
   const showPopup = (payload) => {
     dispatch({ type: "SHOW_POPUP", payload: payload });
   };
-  const hidePopup = () => {
-    dispatch({ type: "HIDE_POPUP" });
+  const hidePopup = (payload) => {
+    dispatch({ type: "HIDE_POPUP", payload: payload });
   };
   const replacePopup = (payload) => {
     dispatch({ type: "REPLACE_POPUP", payload: payload });
+  };
+  const setTimeoutActive = () => {
+    dispatch({ type: "SET_TIMEOUT_ACTIVE" });
   };
 
   let localStorageBookshelves = localStorage.getItem("bookshelves");
@@ -100,6 +98,7 @@ const AppProvider = ({ children }) => {
         showPopup,
         hidePopup,
         replacePopup,
+        setTimeoutActive,
         searchQuery,
         setSearchQuery,
         searchInput,

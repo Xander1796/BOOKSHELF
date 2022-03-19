@@ -146,46 +146,105 @@ section {
   background: #f4f9ff;
 }
 
-.popup {
+.popup-wrapper {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1.5rem;
+  align-items: center;
   position: fixed;
-  width: fit-content;
-  max-width: 95%;
-  z-index: 1000;
   left: 50%;
   bottom: 3%;
   transform: translateX(-50%);
-  font-size: 1.8rem;
+  z-index: 1000;
+  max-width: 95%;
+  min-width: fit-content;
+}
+
+.popup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1.3rem;
+  max-width: 100%;
+  font-size: 1.7rem;
   border-left: 5px solid;
   border-radius: 0.5rem;
   background: #fff;
   color: var(--primary-color-700);
-  box-shadow: 3px 3px 20px rgb(32 33 36 / 15%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* POPUP TRANSITIONS */
 .popup-enter {
-  transform: translate(-50%, 100%);
   opacity: 0;
+  max-height: 0;
 }
 
 .popup-enter-active {
-  transform: translate(-50%, 0%);
-  opacity: 1;
-  transition: all 0.2s ease;
+  animation: popup-enter-anim 0.5s ease forwards;
+}
+
+@keyframes popup-enter-anim {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
+
+  50% {
+    opacity: 0;
+    max-height: 25rem;
+    margin-bottom: 1.3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    transform: scale(0.85) translateY(15%);
+  }
+
+  100% {
+    opacity: 1;
+    max-height: 25rem;
+    margin-bottom: 1.3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    transform: scale(1) translateY(0%);
+  }
 }
 
 .popup-exit {
-  transform: translate(-50%, 0%);
+  max-height: 25rem;
   opacity: 1;
 }
 
 .popup-exit-active {
-  transform: translate(-50%, 100%);
-  opacity: 0;
-  transition: all 0.2s ease;
+  animation: popup-exit-anim 0.5s ease forwards;
+}
+
+@keyframes popup-exit-anim {
+  0% {
+    opacity: 1;
+    max-height: 25rem;
+    margin-bottom: 1.3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  50% {
+    opacity: 0;
+    max-height: 25rem;
+    margin-bottom: 1.3rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  100% {
+    opacity: 0;
+    max-height: 0rem;
+    margin-bottom: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+  }
 }
 
 /* ///// */
@@ -210,27 +269,43 @@ section {
 }
 
 .popup-message h3 {
-  font-size: 1.8rem;
+  font-size: inherit;
 }
 
 .popup-message h3 span {
   font-weight: 500;
 }
 
-.popup-book-added {
+.popup.done {
   border-color: var(--secondary-color);
 }
 
-.popup-book-added .popup-info-icon {
+.popup.done .popup-info-icon {
   fill: var(--secondary-color);
 }
 
-.popup-book-error {
+.popup.error {
   border-color: #9d6161;
 }
 
-.popup-book-error .popup-info-icon {
+.popup.error .popup-info-icon {
   fill: #9d6161;
+}
+
+.popup.removed {
+  border-color: var(--primary-color-700);
+}
+
+.popup.removed .popup-info-icon {
+  fill: var(--primary-color-700);
+}
+
+.popup.moved {
+  border-color: var(--accent-color-500);
+}
+
+.popup.moved .popup-info-icon {
+  fill: var(--accent-color-500);
 }
 
 @keyframes popup-anim {
@@ -266,16 +341,6 @@ section {
   width: 1.5rem;
   height: auto;
   transition: 0.1s ease all;
-}
-
-.popup-book-error .popup-close-btn svg:hover {
-  background: #9d6161;
-  fill: #fff;
-}
-
-.popup-book-added .popup-close-btn svg:hover {
-  background: var(--secondary-color);
-  fill: #fff;
 }
 
 .loading-spinner-wrapper {
@@ -619,7 +684,7 @@ section {
 
 .current-reading-img-wrapper a {
   position: absolute;
-  width: 11rem;
+  width: 10rem;
   height: 14rem;
   border-radius: 0.5rem;
   left: 2rem;
@@ -630,7 +695,6 @@ section {
 .current-reading-img-wrapper a img {
   width: 100%;
   height: 100%;
-  border-radius: 0.5rem;
   box-shadow: 20px 10px 30px rgb(0 0 0 / 30%);
 }
 
@@ -944,7 +1008,7 @@ section {
   flex-wrap: wrap;
   gap: 3rem;
   flex-wrap: wrap;
-  margin-left: 12rem;
+  margin-left: 11rem;
 }
 
 .book-list .actions button.not-allowed {
@@ -1026,9 +1090,17 @@ section {
 
 .book-list img,
 .loading-skeleton-wrapper .top-card .img {
-  width: 10rem;
+  width: 9rem;
   height: 13rem;
   border-radius: 0.5rem;
+}
+
+.book-list img,
+.current-reading-img-wrapper a img,
+.single-book .img-wrapper img {
+  border-top: 7px solid #d9d8d6;
+  border-right: 7px solid #bdbbba;
+  border-radius: 0.5rem 0.2rem 0.5rem 0.2rem;
 }
 
 .book-list h4 {
@@ -1113,12 +1185,11 @@ section {
 
 .single-book .img-wrapper img {
   height: 18rem;
-  width: 15rem;
+  width: 14rem;
   position: absolute;
   left: 2rem;
   bottom: -0.6rem;
   z-index: 10;
-  border-radius: 0.5rem;
   box-shadow: 20px 10px 30px rgb(0 0 0 / 30%);
 }
 
@@ -1540,7 +1611,7 @@ footer {
 
   .single-book .img-wrapper img {
     height: 15rem;
-    width: 12rem;
+    width: 11rem;
   }
 
   .change-current-book ul {

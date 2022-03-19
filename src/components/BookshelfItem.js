@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 
 import { useGlobalContext } from "../context";
 
+import { v4 as uniqueId } from "uuid";
+
 //icons
 
 import { BiRightArrowAlt } from "react-icons/bi";
@@ -37,7 +39,7 @@ const BookshelfItem = (props) => {
   };
 
   return (
-    <li className="book" style={{transitionDelay: props.transitionDelay}}>
+    <li className="book" style={{ transitionDelay: props.transitionDelay }}>
       <div className="top-card">
         <img src={img} />
         <div>
@@ -67,11 +69,11 @@ const BookshelfItem = (props) => {
                   removeBook();
 
                   showPopup({
-                    isPopupVisible: true,
+                    id: uniqueId(),
                     link: `bookshelf${bookshelf.route}`,
                     bookName: title,
                     message: `has been moved to ${bookshelf.bookshelfName}`,
-                    type: "ok",
+                    type: "done",
                   });
                 }}
               >
@@ -90,11 +92,11 @@ const BookshelfItem = (props) => {
               removeBook();
 
               showPopup({
-                isPopupVisible: true,
+                id: uniqueId(),
                 link: "",
                 bookName: title,
                 message: `has been removed`,
-                type: "ok",
+                type: "remove",
               });
             }}
           >

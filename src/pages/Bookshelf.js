@@ -51,7 +51,7 @@ const Bookshelf = () => {
       <article>
         <TransitionGroup className="book-list">
           {currentBookshelf.books.length > 0 &&
-            currentBookshelf.books.map((book, i) => {
+            currentBookshelf.books.map((book, i) => {             
               return (
                 <CSSTransition
                   in

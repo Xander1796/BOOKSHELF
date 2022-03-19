@@ -45,11 +45,11 @@ const Hero = () => {
     }
 
     showPopup({
-      isPopupVisible: true,
+      id: uniqueId(),
       link: `bookshelf/finished-books`,
       bookName: bookshelves[readingNowIndex].books[0].title,
       message: `has been added to Finished books`,
-      type: "ok",
+      type: "done",
     });
 
     bookshelves[readingNowIndex].books.shift();
