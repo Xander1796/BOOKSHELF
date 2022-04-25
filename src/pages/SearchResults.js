@@ -5,13 +5,13 @@ import { useGlobalContext } from "../context";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import { AiOutlineSearch } from "react-icons/ai";
 import useScrollTop from "../custom-hooks/useScrollTop";
+import PreviousPath from "../components/PreviousPath";
 
 import { v4 as uniqueId } from "uuid";
 
 import BookCard from "../components/BookCard";
 
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { Transition } from "react-transition-group";
 
 const SearchResults = () => {
   let { searchQuery, setSearchQuery } = useGlobalContext();
@@ -47,6 +47,7 @@ const SearchResults = () => {
 
   return (
     <section className="search-section">
+      <PreviousPath />
       {isLoading && <LoadingSkeleton />}
 
       {isLoading || (

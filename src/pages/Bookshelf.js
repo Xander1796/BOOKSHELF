@@ -3,6 +3,7 @@ import React from "react";
 import BookshelfItem from "../components/BookshelfItem";
 import EmptyBookshelf from "../components/EmptyBookshelf";
 import { useLocation } from "react-router-dom";
+import PreviousPath from "../components/PreviousPath";
 
 ///LIBRARY FOR ANIMATING ON MOUNT AND UNMOUNT
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -35,6 +36,7 @@ const Bookshelf = () => {
 
   return (
     <section className="bookshelf-section">
+      <PreviousPath />
       <h1>
         {getIcon(currentBookshelf.bookshelfName)}
         {currentBookshelf.bookshelfName}
@@ -51,7 +53,7 @@ const Bookshelf = () => {
       <article>
         <TransitionGroup className="book-list">
           {currentBookshelf.books.length > 0 &&
-            currentBookshelf.books.map((book, i) => {             
+            currentBookshelf.books.map((book, i) => {
               return (
                 <CSSTransition
                   in

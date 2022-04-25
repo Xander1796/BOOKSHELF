@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import BookCard from "../components/BookCard";
 import useScrollTop from "../custom-hooks/useScrollTop";
+import PreviousPath from "../components/PreviousPath";
 
 import { v4 as uniqueId } from "uuid";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -41,6 +42,7 @@ const Top15BestSelled = () => {
 
   return (
     <section className="top-15-section">
+      <PreviousPath />
       {isLoading && <LoadingSkeleton />}
       {isLoading || (
         <>

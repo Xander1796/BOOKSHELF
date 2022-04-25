@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
+import PreviousPath from "../components/PreviousPath";
 
 import { useParams } from "react-router-dom";
 import { useGlobalContext } from "../context";
@@ -91,10 +92,11 @@ const SingleBook = () => {
   };
 
   return (
-    <>
+    <section className="single-book">
+      <PreviousPath />
       {isLoading && <LoadingSpinner />}
       {isLoading || (
-        <section className="single-book">
+        <>
           <div className="img-wrapper">
             <img
               src={
@@ -217,9 +219,9 @@ const SingleBook = () => {
               )}
             </div>
           </div>
-        </section>
+        </>
       )}
-    </>
+    </section>
   );
 };
 

@@ -114,6 +114,24 @@ p {
   color: var(--primary-color-600);
 }
 
+.previous-path-btn {
+  display: flex;
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  cursor: pointer;
+  color: var(--primary-color-700);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #e2dfff;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
+  margin-bottom: 4rem;
+  transition: 0.2s ease all;
+}
+
+.previous-path-btn:hover {
+  box-shadow: inset 0 0 0 2px #e2dfff;
+}
+
 section,
 .nav-content,
 .hero-section-content {
@@ -1069,9 +1087,17 @@ section {
   font-size: 1.5rem;
 }
 
+.book-list .details-and-remove a {
+  transition: 0.2s ease all;
+}
+
 .book-list .details-and-remove .remove {
   color: #b53333;
   background: rgb(181 51 51 / 5%);
+}
+
+.book-list .details-and-remove .remove:hover {
+  background: rgba(181, 51, 51, 0.1);
 }
 
 .book-list .details {
@@ -1079,13 +1105,13 @@ section {
   color: #fff;
 }
 
+.book-list .details:hover {
+  background: #007e59;
+}
+
 .remove-item {
   transform: translateY(10%);
   opacity: 0;
-}
-
-.book-list img {
-  box-shadow: 20px 10px 30px rgb(0 0 0 / 30%);
 }
 
 .book-list img,
@@ -1172,6 +1198,10 @@ section {
 .single-book {
   margin-top: 10rem;
   margin-bottom: 3rem;
+}
+
+.single-book .previous-path-btn {
+  margin-bottom: 8rem;
 }
 
 .single-book .img-wrapper {
